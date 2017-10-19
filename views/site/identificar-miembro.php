@@ -2,7 +2,7 @@
 $this->title="Identificar usuario";
 
 $this->registerJsFile(
-    '@web/webassets/js/identificar-usuario.js',
+    '@web/webAssets/js/identificar-usuario.js',
     ['depends' => [\app\assets\AppAsset::className()]]
 );
 ?>
