@@ -110,7 +110,8 @@ $(document).ready(function () {
 
                 timesButton = 0;
 
-                $("#photo").attr('src', '');
+                ocultarBotonesCancelarConfirmar();
+                mostrarBotonTomarFoto();
 
                 
                 l.stop();

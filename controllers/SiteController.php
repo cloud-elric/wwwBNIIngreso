@@ -98,10 +98,6 @@ class SiteController extends Controller
              $meerkatApi = new Meerkat();
              $resultado = json_decode ( $meerkatApi->reconocerUsuario($urlImage));
 
-            print_r($resultado);
-
-            exit;
-
              $usuario = false;
             
              $usuarioEncontrado['status'] = "No encontrado";
