@@ -10,6 +10,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\components\AccessControlExtend;
+use app\modules\ModUsuarios\models\EntUsuarios;
+use app\models\Meerkat;
 
 class SiteController extends Controller
 {
@@ -56,20 +58,6 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionTest(){
-         //$auth = Yii::$app->authManager;
-    
-        //  // add "updatePost" permission
-        //  $updatePost = $auth->createPermission('about');
-        //  $updatePost->description = 'Update post';
-        //  $auth->add($updatePost);
-        //         // add "admin" role and give this role the "updatePost" permission
-        // // as well as the permissions of the "author" role
-        // $admin = $auth->createRole('test');
-         //$auth->add($admin);
-        // $auth->addChild($admin, $updatePost);
-        
-    }
 
     /**
      * Displays homepage.
@@ -79,82 +67,64 @@ class SiteController extends Controller
     public function actionIndex()
     {
         
-        // $usuario = Yii::$app->user->identity;
-        // $auth = \Yii::$app->authManager;
-        // $authorRole = $auth->getRole('test');
-        // $auth->assign($authorRole, $usuario->getId());
+       
         return $this->render('index');
     }
 
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
+    public function actionIdentificarMiembro(){
 
-        return $this->goHome();
+        return $this->render('identificar-miembro');
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+    public function actionIdentificandoMiembro(){
 
-            return $this->refresh();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if(isset($_POST['imgBase64'])){
+            $data = $_POST['imgBase64'];
+            
+        
+            $data = str_replace('data:image/png;base64,', '', $data);
+            $data = str_replace(' ', '+', $data);
+            $data = base64_decode($data);
+            $idFoto = uniqid();
+            $file = 'imagenes-comparar/'. $idFoto . '.png';
+            $success = file_put_contents($file, $data);
+        
+            $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
+            $urlImage = $baseUrl.'imagenes-comparar/'.$idFoto . '.png';
+        
+        
+             $meerkatApi = new Meerkat();
+             $resultado = json_decode ( $meerkatApi->reconocerUsuario($urlImage));
+
+            print_r($resultado);
+
+            exit;
+
+             $usuario = false;
+            
+             $usuarioEncontrado['status'] = "No encontrado";
+        
+            
+             foreach($resultado as $persona){
+                 if(!$usuario){
+                     foreach($persona as $datos){
+                         $token = $datos->recognition->predictedLabel;
+                         $usuario = true;
+        
+                      $usuarioEncontrado = EntUsuarios::findOne(["txt_token"=>$token]);
+                            
+                        
+                     }
+                 } 
+             }
+             echo json_encode($usuarioEncontrado);
+        
+             exit;
+           
         }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        $this->layout = null;
-        return $this->renderAjax('about');
     }
 
-    public function actionGetcontrollersandactions()
-    {
-        $controllerlist = [];
-        if ($handle = opendir('../controllers')) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && substr($file, strrpos($file, '.') - 10) == 'Controller.php') {
-                    $controllerlist[] = $file;
-                }
-            }
-            closedir($handle);
-        }
-        asort($controllerlist);
-        $fulllist = [];
-        foreach ($controllerlist as $controller):
-            $handle = fopen('../controllers/' . $controller, "r");
-            if ($handle) {
-                while (($line = fgets($handle)) !== false) {
-                    if (preg_match('/public function action(.*?)\(/', $line, $display)):
-                        if (strlen($display[1]) > 2):
-                            $fulllist[strtolower(substr($controller, 0, -14))][] = strtolower($display[1]);
-                        endif;
-                    endif;
-                }
-            }
-            fclose($handle);
-        endforeach;
-
-        print_r($fulllist);
-        exit;
-        return $fulllist;
-    }
+    
 }

@@ -1,28 +1,22 @@
 <?php
 use \yii\helpers\Url;
 $usuario = Yii::$app->user->identity;
+
 ?>
 <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided"
-      data-toggle="menubar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="hamburger-bar"></span>
-      </button>
-      <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-collapse"
-      data-toggle="collapse">
-        <i class="icon wb-more-horizontal" aria-hidden="true"></i>
-      </button>
-      <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-        <img class="navbar-brand-logo" src="../../assets/images/logo.png" title="<?=Yii::$app->name?>">
-        <span class="navbar-brand-text"> <?=Yii::$app->name?></span>
-      </div>
-      <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-search"
-      data-toggle="collapse">
-        <span class="sr-only">Toggle Search</span>
-        <i class="icon wb-search" aria-hidden="true"></i>
-      </button>
+
+
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided unfolded" data-toggle="menubar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="hamburger-bar"></span>
+    </button>
+    <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
+      <img class="navbar-brand-logo" src="../assets/images/logo.png" title="Remark">
+      <span class="navbar-brand-text"> Remark</span>
     </div>
+  </div>
+
     <div class="navbar-container container-fluid">
       <!-- Navbar Collapse -->
       <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
@@ -45,11 +39,17 @@ $usuario = Yii::$app->user->identity;
         <!-- End Navbar Toolbar -->
         <!-- Navbar Toolbar Right -->
         <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+        <?php
+              if(!Yii::$app->user->isGuest){
+              ?>
           <li class="dropdown">
+          
             <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
             data-animation="scale-up" role="button">
               <span class="avatar avatar-online">
+              
                 <img src="<?=$usuario->imageProfile?>" alt="<?=$usuario->nombreCompleto?>">
+                
                 <i></i>
               </span>
             </a>
@@ -63,7 +63,9 @@ $usuario = Yii::$app->user->identity;
               </li>
             </ul>
           </li>
-          
+          <?php 
+              }
+                ?> 
           
         </ul>
         <!-- End Navbar Toolbar Right -->
