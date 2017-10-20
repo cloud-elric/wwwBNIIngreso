@@ -151,7 +151,7 @@ class SiteController extends Controller
             try {
                 if($model = $model->signup()){
 
-                    //$this->guargarUsuarioMeerkat($model);       
+                    $this->guargarUsuarioMeerkat($model);       
 
                     $registro->id_usuario = $model->id_usuario;
                     if($registro->save()){
