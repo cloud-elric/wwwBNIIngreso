@@ -146,13 +146,19 @@ class SiteController extends Controller
             $model->b_miembro = 1;
 
             $transaction = EntUsuarios::getDb()->beginTransaction();
+
+            
             try {
-                $registro->id_usuario = $model->id_usuario;
-                $registro->save();
+                if($model->signup()){
+                    $this->guargarUsuarioMeerkat($miembro);       
 
+                    $registro->id_usuario = $model->id_usuario;
+                    $registro->save();
+                }else{
+                    // ...other DB operations...
+                     $transaction->commit();    
+                }
 
-                // ...other DB operations...
-                $transaction->commit();
             } catch(\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
@@ -170,7 +176,7 @@ class SiteController extends Controller
         $data = str_replace(' ', '+', $data);
         $data = base64_decode($data);
         $idFoto = $miembro->txt_token;
-        $file = '../imagenes/'. $idFoto . '.png';
+        $file = 'imagenes/'. $idFoto . '.png';
         $success = file_put_contents($file, $data);
     
         $urlImage = $baseUrl.'imagenes/'.$idFoto . '.png';
@@ -179,12 +185,10 @@ class SiteController extends Controller
         $conexion = $conexionBaseDatos->openConexion();
     
         $funciones = new FuncionesBaseDatos();
-        if($funciones->guardarUsuario($conexion, $nombre, $idFoto)){
-             $meerkatApi = new Meerkat($apiKey);
-            echo $meerkatApi->guardarUsuario($urlImage, $idFoto);
-        }else{
-            
-        }
+        
+        $meerkatApi = new Meerkat();
+        $meerkatApi->guardarUsuario($file, $miembro->txt_token);
+      
     }
 
     
