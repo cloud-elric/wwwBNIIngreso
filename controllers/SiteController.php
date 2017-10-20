@@ -12,6 +12,8 @@ use app\models\ContactForm;
 use app\components\AccessControlExtend;
 use app\modules\ModUsuarios\models\EntUsuarios;
 use app\models\Meerkat;
+use yii\widgets\ActiveForm;
+use app\models\EntRegistrosUsuarios;
 
 class SiteController extends Controller
 {
@@ -119,6 +121,69 @@ class SiteController extends Controller
         
              exit;
            
+        }
+    }
+
+    public function actionAgregarMiembros(){
+        $model = new EntUsuarios ( [ 
+            'scenario' => 'registerInput' 
+        ] );
+        
+
+        $registro = new EntRegistrosUsuarios();
+        
+
+    
+        return $this->render("agregar-miembros", ['model'=>$model, 'registro'=>$registro]);
+    }
+
+    public function actioGuardarMiembro(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new EntUsuarios();
+        $registro = new EntRegistrosUsuarios();
+
+        if ($model->load ( Yii::$app->request->post () ) && $registro->load(Yii::$app->request->post()) ){
+            $model->b_miembro = 1;
+
+            $transaction = EntUsuarios::getDb()->beginTransaction();
+            try {
+                $registro->id_usuario = $model->id_usuario;
+                $registro->save();
+
+
+                // ...other DB operations...
+                $transaction->commit();
+            } catch(\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } 
+        }
+    
+
+    }
+
+    private function guargarUsuarioMeerkat($miembro){
+
+        $data = $miembro->image;
+    
+        $data = str_replace('data:image/png;base64,', '', $data);
+        $data = str_replace(' ', '+', $data);
+        $data = base64_decode($data);
+        $idFoto = $miembro->txt_token;
+        $file = '../imagenes/'. $idFoto . '.png';
+        $success = file_put_contents($file, $data);
+    
+        $urlImage = $baseUrl.'imagenes/'.$idFoto . '.png';
+    
+        $conexionBaseDatos = new Conexion();
+        $conexion = $conexionBaseDatos->openConexion();
+    
+        $funciones = new FuncionesBaseDatos();
+        if($funciones->guardarUsuario($conexion, $nombre, $idFoto)){
+             $meerkatApi = new Meerkat($apiKey);
+            echo $meerkatApi->guardarUsuario($urlImage, $idFoto);
+        }else{
+            
         }
     }
 

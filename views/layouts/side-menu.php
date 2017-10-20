@@ -46,7 +46,7 @@ use \yii\helpers\Url;
                 </a>
                 <ul class="site-menu-sub">
                     <li class="site-menu-item">
-                        <a class="animsition-link" href="../layouts/menu-collapsed.html">
+                        <a class="animsition-link" href="<?=Url::base()?>/site/agregar-miembros">
                             <span class="site-menu-title">Registrar miembros</span>
                         </a>
                     </li>

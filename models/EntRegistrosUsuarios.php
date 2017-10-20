@@ -32,7 +32,7 @@ class EntRegistrosUsuarios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_usuario', 'id_tipo_pago'], 'integer'],
+            [['id_usuario', 'id_tipo_pago'], 'required','message'=>'Campo requerido'],
             [['fch_registro'], 'safe'],
             [['id_usuario'], 'exist', 'skipOnError' => true, 'targetClass' => EntUsuarios::className(), 'targetAttribute' => ['id_usuario' => 'id_usuario']],
             [['id_tipo_pago'], 'exist', 'skipOnError' => true, 'targetClass' => CatTiposPagos::className(), 'targetAttribute' => ['id_tipo_pago' => 'id_tipo_pago']],
@@ -47,7 +47,7 @@ class EntRegistrosUsuarios extends \yii\db\ActiveRecord
         return [
             'id_registro_usuario' => 'Id Registro Usuario',
             'id_usuario' => 'Id Usuario',
-            'id_tipo_pago' => 'Id Tipo Pago',
+            'id_tipo_pago' => 'Tipo de pago',
             'fch_registro' => 'Fch Registro',
         ];
     }
