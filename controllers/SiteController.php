@@ -137,7 +137,7 @@ class SiteController extends Controller
         return $this->render("agregar-miembros", ['model'=>$model, 'registro'=>$registro]);
     }
 
-    public function actioGuardarMiembro(){
+    public function actionGuardarMiembro(){
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new EntUsuarios();
         $registro = new EntRegistrosUsuarios();
