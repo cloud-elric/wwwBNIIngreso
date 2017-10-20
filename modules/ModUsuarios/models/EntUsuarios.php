@@ -188,7 +188,8 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				'txt_email' => 'Txt Email',
 				'fch_creacion' => 'Fch Creacion',
 				'fch_actualizacion' => 'Fch Actualizacion',
-				'id_status' => 'Id Status' 
+				'id_status' => 'Id Status',
+				'image'=>'Imagen' 
 		];
 	}
 	
@@ -414,6 +415,7 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		$user->generateAuthKey ();
 		$user->fch_creacion = Utils::getFechaActual ();
 		$user->id_tipo_usuario = 1;
+		$user->image = $this->image;
 
 		$user->id_status = self::STATUS_ACTIVED;
 		

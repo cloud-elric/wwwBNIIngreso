@@ -142,8 +142,14 @@ class SiteController extends Controller
         $model = new EntUsuarios();
         $registro = new EntRegistrosUsuarios();
 
+        
+
         if ($model->load ( Yii::$app->request->post () ) && $registro->load(Yii::$app->request->post()) ){
+
             $model->b_miembro = 1;
+
+            $model->image = $_POST['EntUsuarios']['image'];
+            
 
             $transaction = EntUsuarios::getDb()->beginTransaction();
 
@@ -182,16 +188,13 @@ class SiteController extends Controller
         $idFoto = $miembro->txt_token;
         $file = 'imagenes/'. $idFoto . '.png';
         $success = file_put_contents($file, $data);
-    
+
+        $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
         $urlImage = $baseUrl.'imagenes/'.$idFoto . '.png';
     
-        $conexionBaseDatos = new Conexion();
-        $conexion = $conexionBaseDatos->openConexion();
-    
-        $funciones = new FuncionesBaseDatos();
         
         $meerkatApi = new Meerkat();
-        $meerkatApi->guardarUsuario($file, $miembro->txt_token);
+        //$meerkatApi->guardarUsuario($file, $miembro->txt_token);
       
     }
 
