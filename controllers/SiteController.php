@@ -149,15 +149,19 @@ class SiteController extends Controller
 
             
             try {
-                if($model->signup()){
-                    $this->guargarUsuarioMeerkat($model);       
+                if($model = $model->signup()){
+
+                    //$this->guargarUsuarioMeerkat($model);       
 
                     $registro->id_usuario = $model->id_usuario;
-                    $registro->save();
-                }else{
-                    // ...other DB operations...
-                     $transaction->commit();    
+                    if($registro->save()){
+                        $transaction->commit();    
+                    }else{
+                        $transaction->rollBack();
+                    }
                 }
+                    
+                
 
             } catch(\Exception $e) {
                 $transaction->rollBack();
