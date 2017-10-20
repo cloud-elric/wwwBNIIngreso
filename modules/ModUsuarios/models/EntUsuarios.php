@@ -416,7 +416,6 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		$user->id_tipo_usuario = 1;
 
 		$user->id_status = self::STATUS_ACTIVED;
-		$user->id_tipo_pago = $this->id_tipo_pago;
 		
 		return $user->save () ? $user : null;
 	}
