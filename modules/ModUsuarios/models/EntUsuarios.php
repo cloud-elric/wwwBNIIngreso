@@ -71,14 +71,16 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				],
 				[ 
 						[ 
+							    'image',
 								'txt_username',
 								'txt_apellido_paterno',
-								'txt_email' 
+								
 						],
 						'required',
 						'on' => 'registerInput',
 						'message'=>'Campo requerido'
 				],
+
 				// [ 
 				// 		[ 
 				// 				'password'
@@ -93,7 +95,7 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				// 		// 'hasUser'=>false,
 						
 				// ],
-				
+			
 				[ 
 						[ 
 								'password',
@@ -186,7 +188,8 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				'txt_email' => 'Txt Email',
 				'fch_creacion' => 'Fch Creacion',
 				'fch_actualizacion' => 'Fch Actualizacion',
-				'id_status' => 'Id Status' 
+				'id_status' => 'Id Status',
+				'image'=>'Imagen' 
 		];
 	}
 	
@@ -402,19 +405,19 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		
 		$user = new EntUsuarios ();
 
-		
-
 		$user->txt_token = Utils::generateToken ( 'usr' );
 		$user->txt_username = $this->txt_username;
 		$user->txt_apellido_paterno = $this->txt_apellido_paterno;
 		$user->txt_apellido_materno = $this->txt_apellido_materno;
-		$user->txt_email = $this->txt_email;
+		$user->txt_email = $user->txt_token."@email.com";
 		
 		$user->setPassword ( $this->password );
 		$user->generateAuthKey ();
 		$user->fch_creacion = Utils::getFechaActual ();
 		$user->id_tipo_usuario = 1;
-		$user->b_miembro = $this->b_miembro;
+		$user->image = $this->image;
+
+		$user->id_status = self::STATUS_ACTIVED;
 		
 		return $user->save () ? $user : null;
 	}

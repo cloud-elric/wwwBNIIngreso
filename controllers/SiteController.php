@@ -13,6 +13,7 @@ use app\components\AccessControlExtend;
 use app\modules\ModUsuarios\models\EntUsuarios;
 use app\models\Meerkat;
 use yii\widgets\ActiveForm;
+use app\models\EntRegistrosUsuarios;
 
 class SiteController extends Controller
 {
@@ -123,29 +124,79 @@ class SiteController extends Controller
         }
     }
 
-    public function actionAgregarMiembro(){
+    public function actionAgregarMiembros(){
+        $model = new EntUsuarios ( [ 
+            'scenario' => 'registerInput' 
+        ] );
+        
 
-        Yii::$app->response->format = Response::FORMAT_JSON;
-		$model = new EntUsuarios ( [ 
-				'scenario' => 'registerInput' 
-		] );
+        $registro = new EntRegistrosUsuarios();
+        
 
-		if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-			
-			return ActiveForm::validate($model);
-		}
-		
-		if ($model->load ( Yii::$app->request->post () )) {
-			$model->b_miembro = 1;
-			if ($user = $model->signup ()) {
-				
-			
-			}
-			
-			// return $this->redirect(['view', 'id' => $model->id_usuario]);
-		}
-
-       return $this->render("agregar-miembro", ['model'=>$model]);
+    
+        return $this->render("agregar-miembros", ['model'=>$model, 'registro'=>$registro]);
     }
+
+    public function actionGuardarMiembro(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new EntUsuarios();
+        $registro = new EntRegistrosUsuarios();
+
+        
+
+        if ($model->load ( Yii::$app->request->post () ) && $registro->load(Yii::$app->request->post()) ){
+
+            $model->b_miembro = 1;
+
+            $model->image = $_POST['EntUsuarios']['image'];
+            
+
+            $transaction = EntUsuarios::getDb()->beginTransaction();
+
+            
+            try {
+                if($model = $model->signup()){
+
+                    $this->guargarUsuarioMeerkat($model);       
+
+                    $registro->id_usuario = $model->id_usuario;
+                    if($registro->save()){
+                        $transaction->commit();    
+                    }else{
+                        $transaction->rollBack();
+                    }
+                }
+                    
+                
+
+            } catch(\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            } 
+        }
+    
+
+    }
+
+    private function guargarUsuarioMeerkat($miembro){
+
+        $data = $miembro->image;
+    
+        $data = str_replace('data:image/png;base64,', '', $data);
+        $data = str_replace(' ', '+', $data);
+        $data = base64_decode($data);
+        $idFoto = $miembro->txt_token;
+        $file = 'imagenes/'. $idFoto . '.png';
+        $success = file_put_contents($file, $data);
+
+        $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
+        $urlImage = $baseUrl.'imagenes/'.$idFoto . '.png';
+    
+        
+        $meerkatApi = new Meerkat();
+        $meerkatApi->guardarUsuario($file, $miembro->txt_token);
+      
+    }
+
     
 }
