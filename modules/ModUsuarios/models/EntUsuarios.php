@@ -54,13 +54,7 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 	 */
 	public function rules() {
 		return [ 
-				[ 
-						'password',
-						'compare',
-						'compareAttribute' => 'repeatPassword',
-						'on' => 'registerInput',
-						'message'=>'Las contraseñas deben coincidir'
-				],
+				
 				[ 
 						'txt_email',
 						'trim' 
@@ -99,15 +93,7 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				// 		// 'hasUser'=>false,
 						
 				// ],
-				[ 
-						[ 
-								'password',
-								'repeatPassword' 
-						],
-						'required',
-						'on' => 'registerInput',
-						'message'=>'Campo requerido' 
-				],
+				
 				[ 
 						[ 
 								'password',
@@ -416,32 +402,19 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		
 		$user = new EntUsuarios ();
 
-		$user->image = UploadedFile::getInstance($this, 'image');
+		
 
 		$user->txt_token = Utils::generateToken ( 'usr' );
 		$user->txt_username = $this->txt_username;
 		$user->txt_apellido_paterno = $this->txt_apellido_paterno;
 		$user->txt_apellido_materno = $this->txt_apellido_materno;
 		$user->txt_email = $this->txt_email;
-		if($user->image){
-			$user->txt_imagen = $user->txt_token.".".$user->image->extension;
-			if(!$user->upload()){
-				return null;
-			}
-		}
+		
 		$user->setPassword ( $this->password );
 		$user->generateAuthKey ();
 		$user->fch_creacion = Utils::getFechaActual ();
 		$user->id_tipo_usuario = 1;
-
-		
-		
-		// Si esta activada la opcion de mandar correo de activación el usuario estara en status pendiente
-		if (Yii::$app->params ['modUsuarios'] ['mandarCorreoActivacion'] && !$isFacebook) {
-			$user->id_status = self::STATUS_PENDIENTED;
-		} else {
-			$user->id_status = self::STATUS_ACTIVED;
-		}
+		$user->b_miembro = $this->b_miembro;
 		
 		return $user->save () ? $user : null;
 	}

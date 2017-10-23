@@ -105,6 +105,24 @@ $(document).ready(function () {
                     $("#imagen-encontrada").attr("src", "imagenes/" + resp.txt_token + ".png");
 
                 } else {
+                    swal({
+                        title: "Persona no identificada",
+                        text: "No se encontro una persona aproximada a la imagen",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: 'Soy un miembro nuevo',
+                        cancelButtonText: "Cancelar",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            window.location = baseUrl+"site/registrar-miembro";
+                
+                        } else {
+                           
+                        }
+                    });
                     swal("Sin datos", "No se encontro una persona aproximada", "warning");
                 }
 

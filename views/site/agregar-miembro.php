@@ -1,5 +1,7 @@
 <?php
-$this->title="Identificar miembro";
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+$this->title="Agregar miembro";
 
 $this->registerJsFile(
     '@web/webAssets/js/identificar-usuario.js',
@@ -9,6 +11,34 @@ $this->registerJsFile(
 <div class="col-md-10 col-md-offset-1">
     <div class="panel">
         <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                <?php $form = ActiveForm::begin([
+						'id' => 'form-ajax',
+						//'options' => ['class' => 'form-horizontal'],
+						'enableAjaxValidation' => true,
+						'enableClientValidation'=>true,
+					]); ?>
+
+                    
+
+                    <?= $form->field($model, 'txt_username')->textInput(['maxlength' => true, 'placeholder'=>'Nombre'])->label(false) ?>
+
+                    <?= $form->field($model, 'txt_apellido_paterno')->textInput(['maxlength' => true, 'placeholder'=>'Apellido paterno'])->label(false) ?>
+
+                    <?= $form->field($model, 'txt_apellido_materno')->textInput(['maxlength' => true, 'placeholder'=>'Apellido materno'])->label(false) ?>
+
+                    <?= $form->field($model, 'txt_email')->textInput(['maxlength' => true, 'placeholder'=>'Email'])->label(false) ?>
+                    
+
+                    <div class="form-group">
+                        <?= Html::submitButton($model->isNewRecord ? 'Registrarme' : 'Actualizar información', ['class' => "btn btn-success btn-block btn-lg"]) ?>
+                    </div>
+
+                    <?php ActiveForm::end(); ?>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
@@ -36,6 +66,8 @@ $this->registerJsFile(
                     </div>
                 </div>
             </div>
+            
+            
             <canvas id="canvas" style="display:none;"></canvas>
         </div>
     </div>

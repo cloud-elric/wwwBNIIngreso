@@ -12,6 +12,7 @@ use app\models\ContactForm;
 use app\components\AccessControlExtend;
 use app\modules\ModUsuarios\models\EntUsuarios;
 use app\models\Meerkat;
+use yii\widgets\ActiveForm;
 
 class SiteController extends Controller
 {
@@ -122,5 +123,29 @@ class SiteController extends Controller
         }
     }
 
+    public function actionAgregarMiembro(){
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+		$model = new EntUsuarios ( [ 
+				'scenario' => 'registerInput' 
+		] );
+
+		if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+			
+			return ActiveForm::validate($model);
+		}
+		
+		if ($model->load ( Yii::$app->request->post () )) {
+			$model->b_miembro = 1;
+			if ($user = $model->signup ()) {
+				
+			
+			}
+			
+			// return $this->redirect(['view', 'id' => $model->id_usuario]);
+		}
+
+       return $this->render("agregar-miembro", ['model'=>$model]);
+    }
     
 }
