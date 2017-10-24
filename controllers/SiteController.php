@@ -135,6 +135,7 @@ class SiteController extends Controller
         $respuesta['mensaje'] = "Faltan parametros";
         $registro = new EntRegistrosUsuarios();
 
+        echo isset($_POST["token"]) ." ". $registro->load(Yii::$app->request->post()); 
 
         if (isset($_POST["token"]) && $registro->load(Yii::$app->request->post())) {
             $token = $_POST["token"];
