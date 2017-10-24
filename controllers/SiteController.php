@@ -132,17 +132,29 @@ class SiteController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $respuesta['status'] = "error";
-        $respuesta['mensaje'] = "Ocurrio un problema";
-        if ($_POST["token"]) {
+        $respuesta['mensaje'] = "Faltan parametros";
+        $registro = new EntRegistrosUsuarios();
+
+
+        if ($_POST["token"] && $registro->load(Yii::$app->request->post())) {
             $usuario = EntUsuarios::find()->where(["txt_token" => $token])->one();
             if ($usuario) {
                 $registro = new EntRegistrosUsuarios();
                 $registro->id_usuario = $usuario->id_usuario;
                 $registro->fch_registro = Utils::getFechaActual();
 
+                if($registro->save()){
+                    $respuesta["mensaje"] = "Registro completo";
+                    $respuesta["status"] = "success";
+                }else{
+                    $respuesta["No se pudo guardar al usuario"];
+                }
+            }else{
+                $respuesta["mensaje"]= "No se encontro al usuario";
             }
         }
 
+        return $respuesta;
 
     }
 

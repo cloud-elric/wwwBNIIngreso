@@ -61,7 +61,7 @@ $this->registerJsFile(
                 <img style="width:100%;" id="imagen-encontrada" />
 
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-md-6 col-md-offset-3 text-center">
                     <?php 
                     $form = ActiveForm::begin([
                                 'id' => 'form-agregar-registro',
@@ -84,7 +84,7 @@ $this->registerJsFile(
                     </div>
                 </div>   
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-md-6 col-md-offset-3 text-center">
                         <button class="btn btn-danger js-close-modal">
                             No soy yo
                         </button>
