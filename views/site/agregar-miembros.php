@@ -53,7 +53,7 @@ $this->registerJsFile(
             <?= $form->field($registro, 'id_tipo_pago')->radioList(ArrayHelper::map(CatTiposPagos::find()->all(), 'id_tipo_pago', 'txt_nombre')) ?>
 
             <div class="form-group">
-                <?= Html::submitButton($model->isNewRecord ? 'Registrarme' : 'Actualizar información', ['class' => "btn btn-success btn-block btn-lg", 'id'=>'btn-guardar-miembro']) ?>
+                <?= Html::submitButton('<span class="ladda-label">Registrar</span>', ['class' => "btn btn-success btn-block btn-lg ladda-button", "data-style"=>"zoom-in", 'id'=>'btn-guardar-miembro']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>

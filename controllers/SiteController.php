@@ -164,7 +164,8 @@ class SiteController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new EntUsuarios();
         $registro = new EntRegistrosUsuarios();
-
+        $respuesta["status"] = "error";
+        $respuesta["mensaje"] ="Faltan parametros";
 
 
         if ($model->load(Yii::$app->request->post()) && $registro->load(Yii::$app->request->post())) {
@@ -185,19 +186,28 @@ class SiteController extends Controller
                     $registro->id_usuario = $model->id_usuario;
                     if ($registro->save()) {
                         $transaction->commit();
+                        $respuesta["status"] ="success";
+                        $respuesta["mensaje"] ="Usuario guardado correctamente";
                     }
                     else {
+
                         $transaction->rollBack();
+                        $respuesta["mensaje"] ="No se pudo guardar el registro";
                     }
+                }else{
+                    $respuesta["mensaje"] ="No se pudo guardar el usuario";
                 }
 
 
 
             } catch (\Exception $e) {
                 $transaction->rollBack();
+                $respuesta["mensaje"] =$e;
                 throw $e;
             }
         }
+
+        return $respuesta;
 
 
     }
@@ -217,10 +227,16 @@ class SiteController extends Controller
         $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
         $urlImage = $baseUrl . 'imagenes/' . $idFoto . '.png';
 
-        echo $urlImage;
+       
+        // $meerkatApi = new Meerkat();
+        // echo $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
+
+    }
+
+
+    public function actionHardGuardarMeerkat(){
         $meerkatApi = new Meerkat();
         echo $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
-
     }
 
     public function actionAgregarInvitado()

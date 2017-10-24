@@ -62,14 +62,32 @@ function mostrarBotonTomarFoto(){
 }
 
 var timesButton = 0;
+var formMiembro = $('#form-agregar-miembro');
 
-$('#form-agregar-miembro').on('beforeSubmit', function(e) {
+formMiembro.on('afterValidate', function (e, messages, errorAttributes) {
+    if(errorAttributes.length > 0){
+        var button = document.getElementById('btn-guardar-miembro');
+        var l = Ladda.create(button);
+        l.stop();
+        return false;
+    }
+    
+});
+
+formMiembro.on('beforeSubmit', function(e) {
     var form = $(this);
     var button = document.getElementById('btn-guardar-miembro');
     var l = Ladda.create(button);
 
-    if (form.find('.has-error').length || timesButton < 1) {
+
+    if (timesButton < 1) {
         swal("Espera", "Debes tomarte una foto", "warning");
+        l.stop();
+        return false;
+    }
+
+    if (form.find('.has-error').length) {
+        
         l.stop();
         return false;
     }
@@ -80,11 +98,25 @@ $('#form-agregar-miembro').on('beforeSubmit', function(e) {
         type: "POST",
         data: formData,
         success: function (data) {
-            ocultarBotonesCancelarConfirmar();
-            mostrarBotonTomarFoto();
+            
+            if(data.status=="success"){
+                ocultarBotonesCancelarConfirmar();
+                mostrarBotonTomarFoto();
+                swal("Ok", "El miembro ha sido guardado y se ha creado su registro de ingreso", "success");
+                formMiembro[0].reset();
+                formMiembro.data('yiiActiveForm').validated = false;
+                timesButton--;
+            }else{
+                swal("warning", data.mensaje, "warning");
+            }
+
+           
         },
         error: function () {
            
+        },
+        complete: function(){
+            l.stop();
         }
     });
 }).on('submit', function(e){
