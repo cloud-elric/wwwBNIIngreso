@@ -99,7 +99,7 @@ class SiteController extends Controller
             foreach ($resultado as $persona) {
                 if (!$usuario) {
                     foreach ($persona as $datos) {
-                        if($datos->recognition->confidence > 50){
+                        if($datos->recognition->confidence > 30){
                             $token = $datos->recognition->predictedLabel;
                         }else{
                             $token = null;
@@ -234,7 +234,7 @@ class SiteController extends Controller
 
        
          $meerkatApi = new Meerkat();
-         return $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
+         //return $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
 
     }
 
