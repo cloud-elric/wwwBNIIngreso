@@ -193,9 +193,9 @@ class SiteController extends Controller
         $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
         $urlImage = $baseUrl.'imagenes/'.$idFoto . '.png';
     
-        
+        echo $urlImage;
         $meerkatApi = new Meerkat();
-        echo   $meerkatApi->guardarUsuario($file, $miembro->txt_token);
+        echo   $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
       
     }
 
