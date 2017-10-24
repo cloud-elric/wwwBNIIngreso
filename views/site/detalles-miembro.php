@@ -5,7 +5,7 @@ use app\models\Calendario;
 $this->title="Detalle del miembro";
 
 $this->registerCssFile(
-    '@web/webassets/css/profile.css',
+    '@web/webAssets/css/profile.css',
     ['depends' => [\app\assets\AppAsset::className()]]
 );
 
