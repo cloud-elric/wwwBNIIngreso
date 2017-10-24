@@ -80,16 +80,22 @@ $(document).ready(function () {
         e.preventDefault();
         var token = $(this).data("token");
         var url = baseUrl+"site/agregar-entrada";
+        var formEntrada = $("#form-agregar-registro");
+        var data = formEntrada.serializeArray();
+        data.push({token:token});
         $.ajax({
             url: url,
             type: "POST",
-            data:{
-                token: token
-            },
+            data:data,
             success:function(){
                 $('#myModal').modal('hide');
             }
         });
+    });
+
+    $(".js-close-modal").on("click", function(e){
+        e.preventDefault();
+        $('#myModal').modal('hide');
     });
 
     $("#btn-guardar").on("click", function () {
@@ -114,10 +120,10 @@ $(document).ready(function () {
             success: function (resp) {
                 console.log(resp);
 
-                if (resp.usuario.txt_token) {
+                if (resp.usuario && resp.usuario.txt_token) {
 
                     $('#myModal').modal('show');
-                    $("#nombre-usuario").text(resp.usuario.txt_nombre_completo);
+                    $("#nombre-usuario").text(resp.usuario.txt_username+" "+resp.usuario.txt_apellido_paterno);
                     $("#imagen-encontrada").attr("src", baseUrl+"imagenes/" + resp.usuario.txt_token + ".png");
 
                     $(".js-registrar-entrada").data("token", resp.usuario.token);

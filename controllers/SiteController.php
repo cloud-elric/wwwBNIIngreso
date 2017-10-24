@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
@@ -15,6 +14,7 @@ use app\models\Meerkat;
 use yii\widgets\ActiveForm;
 use app\models\EntRegistrosUsuarios;
 use app\modules\ModUsuarios\models\EntUsuariosSearch;
+use app\modules\ModUsuarios\models\Utils;
 
 class SiteController extends Controller
 {
@@ -69,195 +69,221 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        
-       
+
+
         return $this->render('index');
     }
 
-    public function actionIdentificarMiembro(){
+    public function actionIdentificarMiembro()
+    {
+        $registro = new EntRegistrosUsuarios();
 
-        return $this->render('identificar-miembro');
+        return $this->render('identificar-miembro', ['registro' => $registro]);
     }
 
-    public function actionIdentificandoMiembro(){
+    public function actionIdentificandoMiembro()
+    {
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        if(isset($_POST['imgBase64'])){
+        if (isset($_POST['imgBase64'])) {
             $data = $_POST['imgBase64'];
-            
-        
+
+
             $data = str_replace('data:image/png;base64,', '', $data);
             $data = str_replace(' ', '+', $data);
             $data = base64_decode($data);
             $idFoto = uniqid();
-            $file = 'imagenes-comparar/'. $idFoto . '.png';
+            $file = 'imagenes-comparar/' . $idFoto . '.png';
             $success = file_put_contents($file, $data);
-        
-            $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
-            $urlImage = $baseUrl.'imagenes-comparar/'.$idFoto . '.png';
-        
-            
-             $meerkatApi = new Meerkat();
-             $resultado = json_decode ( $meerkatApi->reconocerUsuario($urlImage));
 
-             $usuario = false;
-            
-             $usuarioEncontrado['status'] = "No encontrado";
-        
-            
-             foreach($resultado as $persona){
-                if(!$usuario){
-                    foreach($persona as $datos){
+            $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
+            $urlImage = $baseUrl . 'imagenes-comparar/' . $idFoto . '.png';
+
+
+            $meerkatApi = new Meerkat();
+            $resultado = json_decode($meerkatApi->reconocerUsuario($urlImage));
+
+            $usuario = false;
+
+            $usuarioEncontrado['status'] = "No encontrado";
+
+
+            foreach ($resultado as $persona) {
+                if (!$usuario) {
+                    foreach ($persona as $datos) {
                         $token = $datos->recognition->predictedLabel;
                         $usuario = true;
-                          
-                     $usuarioEncontrado['usuario'] = EntUsuarios::find()->where(["txt_token"=>$token])->one();
-                      
+
+                        $usuarioEncontrado['usuario'] = EntUsuarios::find()->where(["txt_token" => $token])->one();
+
                     }
-                } 
+                }
             }
             return $usuarioEncontrado;
-        
-             exit;
-           
+
+            exit;
+
         }
     }
 
-    public function actionAgregarEntrada(){
-        
+    public function actionAgregarEntrada()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $respuesta['status'] = "error";
+        $respuesta['mensaje'] = "Ocurrio un problema";
+        if ($_POST["token"]) {
+            $usuario = EntUsuarios::find()->where(["txt_token" => $token])->one();
+            if ($usuario) {
+                $registro = new EntRegistrosUsuarios();
+                $registro->id_usuario = $usuario->id_usuario;
+                $registro->fch_registro = Utils::getFechaActual();
+
+            }
+        }
+
+
     }
 
-    public function actionAgregarMiembros(){
-        $model = new EntUsuarios ( [ 
-            'scenario' => 'registerInput' 
-        ] );
-        
+    public function actionAgregarMiembros()
+    {
+        $model = new EntUsuarios([
+            'scenario' => 'registerInput'
+        ]);
+
 
         $registro = new EntRegistrosUsuarios();
-        
 
-    
-        return $this->render("agregar-miembros", ['model'=>$model, 'registro'=>$registro]);
+
+
+        return $this->render("agregar-miembros", ['model' => $model, 'registro' => $registro]);
     }
 
-    public function actionGuardarMiembro(){
+    public function actionGuardarMiembro()
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new EntUsuarios();
         $registro = new EntRegistrosUsuarios();
 
-        
 
-        if ($model->load ( Yii::$app->request->post () ) && $registro->load(Yii::$app->request->post()) ){
+
+        if ($model->load(Yii::$app->request->post()) && $registro->load(Yii::$app->request->post())) {
 
             $model->b_miembro = 1;
 
             $model->image = $_POST['EntUsuarios']['image'];
-            
+
 
             $transaction = EntUsuarios::getDb()->beginTransaction();
 
-            
-            try {
-                if($model = $model->signup()){
 
-                    $this->guargarUsuarioMeerkat($model);       
+            try {
+                if ($model = $model->signup()) {
+
+                    $this->guargarUsuarioMeerkat($model);
 
                     $registro->id_usuario = $model->id_usuario;
-                    if($registro->save()){
-                        $transaction->commit();    
-                    }else{
+                    if ($registro->save()) {
+                        $transaction->commit();
+                    }
+                    else {
                         $transaction->rollBack();
                     }
                 }
-                    
-                
 
-            } catch(\Exception $e) {
+
+
+            } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
-            } 
+            }
         }
-    
+
 
     }
 
-    private function guargarUsuarioMeerkat($miembro){
+    private function guargarUsuarioMeerkat($miembro)
+    {
 
         $data = $miembro->image;
-    
+
         $data = str_replace('data:image/png;base64,', '', $data);
         $data = str_replace(' ', '+', $data);
         $data = base64_decode($data);
         $idFoto = $miembro->txt_token;
-        $file = 'imagenes/'. $idFoto . '.png';
+        $file = 'imagenes/' . $idFoto . '.png';
         $success = file_put_contents($file, $data);
 
         $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
-        $urlImage = $baseUrl.'imagenes/'.$idFoto . '.png';
-    
+        $urlImage = $baseUrl . 'imagenes/' . $idFoto . '.png';
+
         echo $urlImage;
         $meerkatApi = new Meerkat();
-        echo   $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
-      
+        echo $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
+
     }
 
-    public function actionAgregarInvitado(){
-        $model = new EntUsuarios ( [ 
-            'scenario' => 'registerInvitado' 
-        ] );
+    public function actionAgregarInvitado()
+    {
+        $model = new EntUsuarios([
+            'scenario' => 'registerInvitado'
+        ]);
 
         $registro = new EntRegistrosUsuarios();
 
 
-        return $this->render('agregar-invitado', ['invitado'=>$model, 'registro'=>$registro]);
+        return $this->render('agregar-invitado', ['invitado' => $model, 'registro' => $registro]);
     }
 
 
-    public function actionGuardarInvitado(){
+    public function actionGuardarInvitado()
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $respuesta['status'] = 'error';
-        $respuesta['mensaje']='Ocurrio un problema';
+        $respuesta['mensaje'] = 'Ocurrio un problema';
         $model = new EntUsuarios();
         $registro = new EntRegistrosUsuarios();
 
-        if ($model->load ( Yii::$app->request->post () ) && $registro->load(Yii::$app->request->post()) ){
-            
-            
+        if ($model->load(Yii::$app->request->post()) && $registro->load(Yii::$app->request->post())) {
+
+
             $model->b_miembro = 0;
 
             $transaction = EntUsuarios::getDb()->beginTransaction();
 
             try {
-                
-                if($model = $model->signup()){     
+
+                if ($model = $model->signup()) {
 
                     $registro->id_usuario = $model->id_usuario;
-                    if($registro->save()){
+                    if ($registro->save()) {
                         $transaction->commit();
                         $respuesta['status'] = 'success';
                         $respuesta['mensaje'] = 'Invitado registrado correctamente';
-                    }else{
+                    }
+                    else {
                         $transaction->rollBack();
                         $respuesta['mensaje'] = 'Ocurrio un problema al guardar';
                     }
-                }else{
+                }
+                else {
                     $respuesta['mensaje'] = 'No se enviaron todos los datos';
                 }
-                    
-                
 
-            } catch(\Exception $e) {
+
+
+            } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
                 $respuesta['mensaje'] = $e;
-            } 
+            }
         }
 
         return $respuesta;
     }
 
-    public function actionInvitados(){
+    public function actionInvitados()
+    {
 
         $searchModel = new EntUsuariosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -268,5 +294,5 @@ class SiteController extends Controller
         ]);
     }
 
-    
+
 }

@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\ArrayHelper;
+use app\models\CatTiposPagos;
 $this->title="Identificar miembro";
 
 $this->registerJsFile(
@@ -53,17 +55,44 @@ $this->registerJsFile(
             </div>
             <div class="modal-body">
 
-                <h5>Hola <span  id="nombre-usuario"></span></h5>
+                <h5>Bienvenido(a) <span  id="nombre-usuario"></span></h5>
                 <img style="width:100%;" id="imagen-encontrada" />
 
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
-                        <button class="btn btn-succes btn-block btn-lg js-registrar-entrada" data-token="">
+                    <?php 
+                    $form = ActiveForm::begin([
+                                'id' => 'form-agregar-registro',
+                                //'options' => ['class' => 'form-horizontal'],
+                                
+                                'enableClientValidation'=>true,
+                            ]); ?>
+                    <br>
+                    <br>                
+
+                    <?= $form->field($registro, 'id_tipo_pago')->radioList(ArrayHelper::map(CatTiposPagos::find()->all(), 'id_tipo_pago', 'txt_nombre')) ?>
+
+                    <div class="form-group">
+                        <?= Html::submitButton('Registrar entrada', ['class' => "btn btn-succes btn-block btn-lg js-registrar-entrada", 'id'=>'btn-guardar-miembro', 'data-token'=>""]) ?>
+                    </div>
+
+                    <?php 
+                    ActiveForm::end(); 
+                    ?>    
+
+
+                        <button class="" data-token="">
                             Registrar entrada
                         </button>
                     </div>
-                </div>    
-
+                </div>   
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <button class="btn btn-danger js-close-modal">
+                            No soy yo
+                        </button>
+                    </div>
+                </div> 
             </div>
 
         </div>
