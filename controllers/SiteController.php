@@ -234,9 +234,12 @@ class SiteController extends Controller
     }
 
 
-    public function actionHardGuardarMeerkat(){
+    public function actionHardGuardarMeerkat($token){
         $meerkatApi = new Meerkat();
-        echo $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
+
+        $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
+        $urlImage = $baseUrl . 'imagenes/' . $token . '.png';
+        echo $meerkatApi->guardarUsuario($urlImage, $token);
     }
 
     public function actionAgregarInvitado()
