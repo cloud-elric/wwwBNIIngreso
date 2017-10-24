@@ -145,10 +145,10 @@ $(document).ready(function () {
                         text: "No se encontro una persona aproximada a la imagen",
                         type: "warning",
                         showCancelButton: true,
-                        confirmButtonText: 'Soy un miembro nuevo',
-                        cancelButtonText: "Cancelar",
+                        
                         closeOnConfirm: false,
-                        closeOnCancel: false
+                        closeOnCancel: false,
+                        buttons: ["Intentar de nuevo", "Soy un miembro nuevo"],
                     
                     }).then((confirm) => {
                         if (confirm) {
