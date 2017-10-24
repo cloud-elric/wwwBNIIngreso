@@ -61,6 +61,10 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 						'trim' 
 				],
 				[ 
+					'b_miembro',
+					'trim' 
+			],
+				[ 
 						'txt_username',
 						
 						'trim' 
@@ -211,7 +215,8 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				'fch_actualizacion' => 'Fch Actualizacion',
 				'id_status' => 'Id Status',
 				'image'=>'Imagen', 
-				'id_usuario_miembro'=>'Usuario que invito'
+				'id_usuario_miembro'=>'Usuario que invito',
+				'b_miembro'=>'Es miembro?'
 		];
 	}
 	

@@ -195,7 +195,7 @@ class SiteController extends Controller
     
         
         $meerkatApi = new Meerkat();
-        $meerkatApi->guardarUsuario($file, $miembro->txt_token);
+        echo   $meerkatApi->guardarUsuario($file, $miembro->txt_token);
       
     }
 
