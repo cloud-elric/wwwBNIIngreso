@@ -115,12 +115,13 @@ $(document).ready(function () {
                         closeOnConfirm: false,
                         closeOnCancel: false
                     
-                    },
-                    function(){
-                      swal("Deleted!", "Your imaginary file has been deleted.", "success");
-                    })//.then(
-                        //function () {window.location = baseUrl+"site/registrar-miembros"; },
-                        //function () { return false; });
+                    }).then((confirm) => {
+                        if (confirm) {
+                            window.location = baseUrl+"site/registrar-miembros";
+                        } else {
+                          //swal("Your imaginary file is safe!");
+                        }
+                      });
                     //swal("Sin datos", "No se encontro una persona aproximada", "warning");
                 }
 
