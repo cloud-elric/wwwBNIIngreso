@@ -114,16 +114,11 @@ $(document).ready(function () {
                         cancelButtonText: "Cancelar",
                         closeOnConfirm: false,
                         closeOnCancel: false
-                    },
-                    function(isConfirm) {
-                        if (isConfirm) {
-                            window.location = baseUrl+"site/registrar-miembro";
-                
-                        } else {
-                           
-                        }
-                    });
-                    swal("Sin datos", "No se encontro una persona aproximada", "warning");
+                    
+                    }).then(
+                        function () {window.location = baseUrl+"site/registrar-miembro"; },
+                        function () { return false; });;
+                    //swal("Sin datos", "No se encontro una persona aproximada", "warning");
                 }
 
                 timesButton = 0;
