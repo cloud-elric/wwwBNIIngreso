@@ -80,9 +80,8 @@ $(document).ready(function () {
         e.preventDefault();
         var token = $(this).data("token");
         var url = baseUrl+"site/agregar-entrada";
-        var formEntrada = $("#form-agregar-registro");
-        var data = formEntrada.serializeArray();
-        data.push({token:token});
+        var formEntrada = $("#form-agregar-registro")+ "&token=" + token;
+        
         $.ajax({
             url: url,
             type: "POST",
