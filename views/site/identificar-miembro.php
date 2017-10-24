@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\ArrayHelper;
 use app\models\CatTiposPagos;
+use yii\widgets\ActiveForm;
 $this->title="Identificar miembro";
 
 $this->registerJsFile(
