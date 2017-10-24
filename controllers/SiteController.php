@@ -137,6 +137,7 @@ class SiteController extends Controller
 
 
         if ($_POST["token"] && $registro->load(Yii::$app->request->post())) {
+            $token = $_POST["token"];
             $usuario = EntUsuarios::find()->where(["txt_token" => $token])->one();
             if ($usuario) {
                 $registro = new EntRegistrosUsuarios();
