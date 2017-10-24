@@ -92,6 +92,8 @@ $(document).ready(function () {
                 if(resp.status=="success"){
                     $('#myModal').modal('hide');
                     swal("OK", "Tu registro se ha completado", "success");
+                }else{
+                    swal("Error", "Se ha producido un problema al guardar", "warning");
                 }
                 
             }
