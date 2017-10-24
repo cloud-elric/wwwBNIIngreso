@@ -115,9 +115,12 @@ $(document).ready(function () {
                         closeOnConfirm: false,
                         closeOnCancel: false
                     
-                    }).then(
-                        function () {window.location = baseUrl+"site/registrar-miembro"; },
-                        function () { return false; });;
+                    },
+                    function(){
+                      swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    })//.then(
+                        //function () {window.location = baseUrl+"site/registrar-miembros"; },
+                        //function () { return false; });
                     //swal("Sin datos", "No se encontro una persona aproximada", "warning");
                 }
 
