@@ -228,8 +228,8 @@ class SiteController extends Controller
         $urlImage = $baseUrl . 'imagenes/' . $idFoto . '.png';
 
        
-        // $meerkatApi = new Meerkat();
-        // echo $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
+         $meerkatApi = new Meerkat();
+         echo $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
 
     }
 
