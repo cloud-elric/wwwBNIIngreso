@@ -167,7 +167,7 @@ class EntUsuariosSearch extends EntUsuarios
             ->andFilterWhere(['like', 'txt_auth_key', $this->txt_auth_key])
             ->andFilterWhere(['like', 'txt_password_hash', $this->txt_password_hash])
             ->andFilterWhere(['like', 'txt_password_reset_token', $this->txt_password_reset_token])
-            ->andFilterWhere(['like', 'txt_email', $this->txt_email])->orderBy("txt_username, txt_apellido_paterno");
+            ->andFilterWhere(['like', 'txt_email', $this->txt_email])->orderBy("id_usuario DESC, txt_username, txt_apellido_paterno");
 
         return $dataProvider;
     }

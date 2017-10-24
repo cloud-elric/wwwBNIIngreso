@@ -188,13 +188,13 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 						'string',
 						'max' => 32 
 				],
-				[ 
-						[ 
-								'txt_email' 
-						],
-						'unique',
-						'message'=>'El email ya se encuentra registrado'  
-				],
+				// [ 
+				// 		[ 
+				// 				'txt_email' 
+				// 		],
+				// 		'unique',
+				// 		'message'=>'El email ya se encuentra registrado'  
+				// ],
 				[ 
 						[ 
 								'txt_token' 
