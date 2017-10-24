@@ -186,7 +186,7 @@ class SiteController extends Controller
             try {
                 if ($model = $model->signup()) {
 
-                    $this->guargarUsuarioMeerkat($model);
+                    $respuesta["resultado"] = $this->guargarUsuarioMeerkat($model);
 
                     $registro->id_usuario = $model->id_usuario;
                     if ($registro->save()) {
@@ -234,7 +234,7 @@ class SiteController extends Controller
 
        
          $meerkatApi = new Meerkat();
-         echo $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
+         return $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
 
     }
 
