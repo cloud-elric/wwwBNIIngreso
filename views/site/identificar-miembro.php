@@ -81,11 +81,6 @@ $this->registerJsFile(
                     <?php 
                     ActiveForm::end(); 
                     ?>    
-
-
-                        <button class="" data-token="">
-                            Registrar entrada
-                        </button>
                     </div>
                 </div>   
                 <div class="row">

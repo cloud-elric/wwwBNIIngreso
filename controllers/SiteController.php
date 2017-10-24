@@ -77,6 +77,7 @@ class SiteController extends Controller
     public function actionIdentificarMiembro()
     {
         $registro = new EntRegistrosUsuarios();
+        $registro->id_tipo_pago = 1;
 
         return $this->render('identificar-miembro', ['registro' => $registro]);
     }
