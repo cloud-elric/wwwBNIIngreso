@@ -1,5 +1,6 @@
 <?php
 use app\modules\ModUsuarios\models\EntUsuarios;
+use app\models\Calendario;
 ?>
 <div class="media">
     <div class="media-left">
@@ -12,9 +13,18 @@ use app\modules\ModUsuarios\models\EntUsuarios;
     <div class="media-body">
         <h4 class="media-heading">
             <?=$model->nombreCompleto?>
+            <small>
+            <?=count($model->registros)>0?Calendario::getDateComplete($model->registros[0]->fch_registro):"Sin forma de pago"?>
+            </small>
         </h4>
         <p>
             <i class="icon icon-color wb-envelope" aria-hidden="true"></i><?=$model->txt_email?>
+        </p>
+        <p>
+            <i class="icon icon-color wb-user-add" aria-hidden="true"></i>Invitado por: <?=$model->invitadoPor?$model->invitadoPor->nombreCompleto:"Sin invitación"?>
+        </p>
+        <p>    
+            <i class="icon icon-color wb-payment" aria-hidden="true"></i>Forma de pago: <?=count($model->registros)>0?$model->registros[0]->idTipoPago->txt_nombre:"Sin forma de pago"?>
         </p>
         <div>
             <?php
@@ -35,7 +45,7 @@ use app\modules\ModUsuarios\models\EntUsuarios;
     <!-- Single button -->
 <div class="media-right">
     <div class="btn-group">
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-info dropdown-toggle disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Acciones <span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-info dropdown-menu-right">

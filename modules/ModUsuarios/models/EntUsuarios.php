@@ -106,11 +106,23 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 					'on' => 'registerInput',
 					'message'=>'Formato de email no válido'
 			],
+
+			[ 
+				[ 
+						
+						'txt_email'
+						
+				],
+				'email',
+				'on' => 'registerInvitado',
+				'message'=>'Formato de email no válido'
+		],
 				[ 
 					[ 
 							
 							'txt_username',
 							'txt_apellido_paterno',
+							'txt_email'
 							
 					],
 					'required',
@@ -565,5 +577,13 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function getRegistros()
     {
 		return $this->hasMany(EntRegistrosUsuarios::className(), ['id_usuario' => 'id_usuario'])->orderBy("fch_registro DESC");
-    }
+	}
+	
+	/**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvitadoPor()
+    {
+		return $this->hasOne(EntUsuarios::className(), ['id_usuario' => 'id_usuario_miembro']);
+	}
 }

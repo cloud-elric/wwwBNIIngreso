@@ -90,6 +90,7 @@ class EntUsuariosSearch extends EntUsuarios
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            //'sort'=> ['defaultOrder' => SORT_ASC],
             'pagination' => [
                 'pageSize' => 50,
             ],
@@ -121,7 +122,7 @@ class EntUsuariosSearch extends EntUsuarios
             ->andFilterWhere(['like', 'txt_auth_key', $this->txt_auth_key])
             ->andFilterWhere(['like', 'txt_password_hash', $this->txt_password_hash])
             ->andFilterWhere(['like', 'txt_password_reset_token', $this->txt_password_reset_token])
-            ->andFilterWhere(['like', 'txt_email', $this->txt_email]);
+            ->andFilterWhere(['like', 'txt_email', $this->txt_email])->orderBy("txt_username, txt_apellido_paterno");
 
         return $dataProvider;
     }
@@ -134,6 +135,7 @@ class EntUsuariosSearch extends EntUsuarios
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['txt_username'=>SORT_ASC]],
             'pagination' => [
                 'pageSize' => 50,
             ],
@@ -165,7 +167,7 @@ class EntUsuariosSearch extends EntUsuarios
             ->andFilterWhere(['like', 'txt_auth_key', $this->txt_auth_key])
             ->andFilterWhere(['like', 'txt_password_hash', $this->txt_password_hash])
             ->andFilterWhere(['like', 'txt_password_reset_token', $this->txt_password_reset_token])
-            ->andFilterWhere(['like', 'txt_email', $this->txt_email]);
+            ->andFilterWhere(['like', 'txt_email', $this->txt_email])->orderBy("txt_username, txt_apellido_paterno");
 
         return $dataProvider;
     }
