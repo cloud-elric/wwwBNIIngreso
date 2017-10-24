@@ -111,8 +111,9 @@ class SiteController extends Controller
                      foreach($persona as $datos){
                          $token = $datos->recognition->predictedLabel;
                          $usuario = true;
-        echo $token;
+        
                       $usuarioEncontrado = EntUsuarios::find()->where(["txt_token"=>$token])->one();
+                      
                             
                         
                      }
