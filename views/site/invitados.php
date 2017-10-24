@@ -60,6 +60,7 @@ $this->registerJsFile(
         </div>
     </div>
 </div>
+</div>   
 <!-- End Panel -->
 
 
@@ -75,7 +76,3 @@ $this->registerJsFile(
 
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Ent Usuarios', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
