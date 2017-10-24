@@ -97,10 +97,10 @@ class SiteController extends Controller
             $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
             $urlImage = $baseUrl.'imagenes-comparar/'.$idFoto . '.png';
         
-            echo  $urlImage;
+            
              $meerkatApi = new Meerkat();
              $resultado = json_decode ( $meerkatApi->reconocerUsuario($urlImage));
-            print_r($resultado);
+
              $usuario = false;
             
              $usuarioEncontrado['status'] = "No encontrado";
@@ -112,7 +112,7 @@ class SiteController extends Controller
                          $token = $datos->recognition->predictedLabel;
                          $usuario = true;
         
-                      $usuarioEncontrado = EntUsuarios::findOne(["txt_token"=>$token]);
+                      $usuarioEncontrado = EntUsuarios::find()->where(["txt_token"=>$token])->one();
                             
                         
                      }
