@@ -107,19 +107,17 @@ class SiteController extends Controller
         
             
              foreach($resultado as $persona){
-                 if(!$usuario){
-                     foreach($persona as $datos){
-                         $token = $datos->recognition->predictedLabel;
-                         $usuario = true;
-        
-                      $usuarioEncontrado = EntUsuarios::find()->where(["txt_token"=>$token])->one();
+                if(!$usuario){
+                    foreach($persona as $datos){
+                        $token = $datos->recognition->predictedLabel;
+                        $usuario = true;
+                          
+                     $usuarioEncontrado['usuario'] = EntUsuarios::find()->where(["txt_token"=>$token])->one();
                       
-                            
-                        
-                     }
-                 } 
-             }
-             echo json_encode($usuarioEncontrado);
+                    }
+                } 
+            }
+            return $usuarioEncontrado;
         
              exit;
            

@@ -98,7 +98,7 @@ $(document).ready(function () {
             success: function (resp) {
                 console.log(resp);
 
-                if (resp.txt_token) {
+                if (resp.usuario.txt_token) {
 
                     $('#myModal').modal('show');
                     $("#nombre-usuario").text(resp.txt_nombre_completo);
