@@ -117,7 +117,7 @@ $(document).ready(function () {
                     
                     }).then((confirm) => {
                         if (confirm) {
-                            window.location = baseUrl+"site/registrar-miembros";
+                            window.location = baseUrl+"site/agregar-miembros";
                         } else {
                           //swal("Your imaginary file is safe!");
                         }
