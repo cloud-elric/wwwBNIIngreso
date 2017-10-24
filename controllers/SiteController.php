@@ -135,13 +135,13 @@ class SiteController extends Controller
         $respuesta['mensaje'] = "Faltan parametros";
         $registro = new EntRegistrosUsuarios();
 
-        echo isset($_POST["token"]) ." ". $registro->load(Yii::$app->request->post()); 
+        
 
         if (isset($_POST["token"]) && $registro->load(Yii::$app->request->post())) {
             $token = $_POST["token"];
             $usuario = EntUsuarios::find()->where(["txt_token" => $token])->one();
             if ($usuario) {
-                $registro = new EntRegistrosUsuarios();
+                
                 $registro->id_usuario = $usuario->id_usuario;
                 $registro->fch_registro = Utils::getFechaActual();
 
@@ -149,7 +149,7 @@ class SiteController extends Controller
                     $respuesta["mensaje"] = "Registro completo";
                     $respuesta["status"] = "success";
                 }else{
-                    $respuesta["No se pudo guardar al usuario"];
+                    $respuesta["mensaje"] = "No se pudo guardar al usuario";
                 }
             }else{
                 $respuesta["mensaje"]= "No se encontro al usuario";
