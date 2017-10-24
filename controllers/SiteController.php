@@ -331,5 +331,9 @@ class SiteController extends Controller
         
     }
 
+    public function actionTestDate(){
+        echo Utils::getFechaActual();
+    }
+
 
 }
