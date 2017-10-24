@@ -84,7 +84,7 @@ $(document).ready(function () {
             url: url,
             type: "POST",
             data:{
-                token = token
+                token: token
             },
             success:function(){
                 $('#myModal').modal('hide');
