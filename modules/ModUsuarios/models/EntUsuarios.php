@@ -9,6 +9,7 @@ use yii\web\IdentityInterface;
 use app\modules\ModUsuarios\models\Utils;
 use kartik\password\StrengthValidator;
 use yii\web\UploadedFile;
+use app\models\EntRegistrosUsuarios;
 
 /**
  * This is the model class for table "ent_usuarios".
@@ -444,6 +445,11 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		$user->id_tipo_usuario = 1;
 		$user->image = $this->image;
 		$user->id_usuario_miembro = $this->id_usuario_miembro;
+		$user->b_miembro = $this->b_miembro;	
+
+		if($user->b_miembro){
+			$user->txt_imagen = $user->txt_token.".png";
+		}
 
 		$user->id_status = self::STATUS_ACTIVED;
 		
@@ -521,7 +527,7 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		
 		if(empty($usuarioFacebook)){
 			if ($this->txt_imagen) {
-				return $basePath . '/profiles/' . $this->txt_token."/". $this->txt_imagen;
+				return $basePath . '/imagenes/'. $this->txt_imagen;
 			}
 			
 			return $basePath . '/webAssets/images/site/user.png';
@@ -540,4 +546,12 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 			return $usuarioFacebook;
 		}
 	}
+
+	/**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRegistros()
+    {
+		return $this->hasMany(EntRegistrosUsuarios::className(), ['id_usuario' => 'id_usuario'])->orderBy("fch_registro DESC");
+    }
 }

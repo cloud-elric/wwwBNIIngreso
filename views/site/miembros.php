@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ListView;
 
@@ -7,7 +6,7 @@ use yii\widgets\ListView;
 /* @var $searchModel app\modules\ModUsuarios\models\EntUsuariosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Invitados';
+$this->title = 'Miembros';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCssFile(
@@ -39,7 +38,7 @@ $this->registerJsFile(
                 <?php
                 echo ListView::widget([
                     'dataProvider' => $dataProvider,
-                    'itemView' => '_item-invitado',
+                    'itemView' => '_item-miembro',
                     'layout' => "<ul class='list-group'>{items}</ul>\n{summary}\n{pager}",
                     'itemOptions'=>[
                         'tag'=>'li',
@@ -61,15 +60,6 @@ $this->registerJsFile(
     </div>
 </div>
 <!-- End Panel -->
-
-
-
-
-
-
-
-
-
 
 
 

@@ -18,32 +18,7 @@ use app\modules\ModUsuarios\models\Utils;
 
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    // public function behaviors()
-    // {
-        // return [
-        //     'access' => [
-        //         'class' => AccessControlExtend::className(),
-        //         'only' => ['logout', 'about'],
-        //         'rules' => [
-        //             [
-        //                 'actions' => ['logout'],
-        //                 'allow' => true,
-        //                 'roles' => ['admin'],
-        //             ],
-                   
-        //         ],
-        //     ],
-            // 'verbs' => [
-            //     'class' => VerbFilter::className(),
-            //     'actions' => [
-            //         'logout' => ['post'],
-            //     ],
-            // ],
-        //];
-    //}
+    
 
     /**
      * @inheritdoc
@@ -72,6 +47,16 @@ class SiteController extends Controller
 
 
         return $this->render('index');
+    }
+
+    public function actionMiembros(){
+        $searchModel = new EntUsuariosSearch();
+        $dataProvider = $searchModel->searchMiembros(Yii::$app->request->queryParams);
+
+        return $this->render('miembros', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionIdentificarMiembro()
@@ -301,12 +286,25 @@ class SiteController extends Controller
     {
 
         $searchModel = new EntUsuariosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchInvitados(Yii::$app->request->queryParams);
 
         return $this->render('invitados', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionDetallesMiembro($token=null){
+
+        $miembro = EntUsuarios::find()->where(["txt_token"=>$token])->one();
+        if($miembro){
+
+            return $this->render("detalles-miembro", ["miembro"=>$miembro]);    
+        }else{
+            $this->goHome();
+        }
+
+        
     }
 
 

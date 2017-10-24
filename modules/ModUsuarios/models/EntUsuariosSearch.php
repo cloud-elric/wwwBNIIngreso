@@ -81,4 +81,92 @@ class EntUsuariosSearch extends EntUsuarios
 
         return $dataProvider;
     }
+
+    public function searchMiembros($params)
+    {
+        $query = EntUsuarios::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id_usuario' => $this->id_usuario,
+            'id_tipo_usuario' => 1,
+            'fch_creacion' => $this->fch_creacion,
+            'fch_actualizacion' => $this->fch_actualizacion,
+            'id_status' => $this->id_status,
+            'b_miembro' => 1,
+        ]);
+
+        $query->andFilterWhere(['like', 'txt_token', $this->txt_token])
+            ->andFilterWhere(['like', 'txt_imagen', $this->txt_imagen])
+            ->andFilterWhere(['like', 'txt_username', $this->txt_username])
+            ->andFilterWhere(['like', 'txt_apellido_paterno', $this->txt_apellido_paterno])
+            ->andFilterWhere(['like', 'txt_apellido_materno', $this->txt_apellido_materno])
+            ->andFilterWhere(['like', 'txt_auth_key', $this->txt_auth_key])
+            ->andFilterWhere(['like', 'txt_password_hash', $this->txt_password_hash])
+            ->andFilterWhere(['like', 'txt_password_reset_token', $this->txt_password_reset_token])
+            ->andFilterWhere(['like', 'txt_email', $this->txt_email]);
+
+        return $dataProvider;
+    }
+
+    public function searchInvitados($params)
+    {
+        $query = EntUsuarios::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id_usuario' => $this->id_usuario,
+            'id_tipo_usuario' => 1,
+            'fch_creacion' => $this->fch_creacion,
+            'fch_actualizacion' => $this->fch_actualizacion,
+            'id_status' => $this->id_status,
+            'b_miembro' => 0,
+        ]);
+
+        $query->andFilterWhere(['like', 'txt_token', $this->txt_token])
+            ->andFilterWhere(['like', 'txt_imagen', $this->txt_imagen])
+            ->andFilterWhere(['like', 'txt_username', $this->txt_username])
+            ->andFilterWhere(['like', 'txt_apellido_paterno', $this->txt_apellido_paterno])
+            ->andFilterWhere(['like', 'txt_apellido_materno', $this->txt_apellido_materno])
+            ->andFilterWhere(['like', 'txt_auth_key', $this->txt_auth_key])
+            ->andFilterWhere(['like', 'txt_password_hash', $this->txt_password_hash])
+            ->andFilterWhere(['like', 'txt_password_reset_token', $this->txt_password_reset_token])
+            ->andFilterWhere(['like', 'txt_email', $this->txt_email]);
+
+        return $dataProvider;
+    }
 }

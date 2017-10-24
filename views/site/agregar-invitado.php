@@ -26,7 +26,7 @@ $this->title="Registrar invitado";
             <br>
             <br>                
 
-            <?= $form->field($invitado, 'id_usuario_miembro')->dropDownList(ArrayHelper::map(EntUsuarios::find(['b_miembro'=>1])->orderBy("txt_username")->all(), 'id_usuario', 'nombreCompleto'), ['prompt'=>'Selecciona el miembro que te invito'])->label(false) ?>    
+            <?= $form->field($invitado, 'id_usuario_miembro')->dropDownList(ArrayHelper::map(EntUsuarios::find()->where(['b_miembro'=>1, 'id_tipo_usuario'=>1])->orderBy("txt_username")->all(), 'id_usuario', 'nombreCompleto'), ['prompt'=>'Selecciona el miembro que te invito'])->label(false) ?>    
 
             <?= $form->field($invitado, 'txt_username')->textInput(['maxlength' => true, 'placeholder'=>'Nombre'])->label(false) ?>
 
