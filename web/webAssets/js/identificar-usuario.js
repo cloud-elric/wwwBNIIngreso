@@ -82,7 +82,7 @@ $(document).ready(function () {
         var url = baseUrl+"site/agregar-entrada";
         var formEntrada = $("#form-agregar-registro");
         var data = formEntrada.serialize()+ "&token=" + token;
-        
+        var l = Ladda.create(this);
         $.ajax({
             url: url,
             type: "POST",
@@ -96,6 +96,9 @@ $(document).ready(function () {
                     swal("Error", "Se ha producido un problema al guardar", "warning");
                 }
                 
+            }, 
+            complete:function(){
+                l.stop();
             }
         });
     });
