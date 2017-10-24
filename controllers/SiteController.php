@@ -14,6 +14,7 @@ use app\modules\ModUsuarios\models\EntUsuarios;
 use app\models\Meerkat;
 use yii\widgets\ActiveForm;
 use app\models\EntRegistrosUsuarios;
+use app\modules\ModUsuarios\models\EntUsuariosSearch;
 
 class SiteController extends Controller
 {
@@ -251,6 +252,17 @@ class SiteController extends Controller
         }
 
         return $respuesta;
+    }
+
+    public function actionInvitados(){
+
+        $searchModel = new EntUsuariosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('invitados', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     

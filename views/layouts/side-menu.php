@@ -81,7 +81,7 @@ use \yii\helpers\Url;
                         </a>
                     </li>
                     <li class="site-menu-item">
-                        <a class="animsition-link" href="../layouts/menu-collapsed-alt.html">
+                        <a class="animsition-link" href="<?=Url::base()?>/site/invitados">
                             <span class="site-menu-title">Invitados</span>
                         </a>
                     </li>
