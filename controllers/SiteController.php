@@ -198,5 +198,60 @@ class SiteController extends Controller
       
     }
 
+    public function actionAgregarInvitado(){
+        $model = new EntUsuarios ( [ 
+            'scenario' => 'registerInvitado' 
+        ] );
+
+        $registro = new EntRegistrosUsuarios();
+
+
+        return $this->render('agregar-invitado', ['invitado'=>$model, 'registro'=>$registro]);
+    }
+
+
+    public function actionGuardarInvitado(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $respuesta['status'] = 'error';
+        $respuesta['mensaje']='Ocurrio un problema';
+        $model = new EntUsuarios();
+        $registro = new EntRegistrosUsuarios();
+
+        if ($model->load ( Yii::$app->request->post () ) && $registro->load(Yii::$app->request->post()) ){
+            
+            
+            $model->b_miembro = 0;
+
+            $transaction = EntUsuarios::getDb()->beginTransaction();
+
+            try {
+                
+                if($model = $model->signup()){     
+
+                    $registro->id_usuario = $model->id_usuario;
+                    if($registro->save()){
+                        $transaction->commit();
+                        $respuesta['status'] = 'success';
+                        $respuesta['mensaje'] = 'Invitado registrado correctamente';
+                    }else{
+                        $transaction->rollBack();
+                        $respuesta['mensaje'] = 'Ocurrio un problema al guardar';
+                    }
+                }else{
+                    $respuesta['mensaje'] = 'No se enviaron todos los datos';
+                }
+                    
+                
+
+            } catch(\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+                $respuesta['mensaje'] = $e;
+            } 
+        }
+
+        return $respuesta;
+    }
+
     
 }

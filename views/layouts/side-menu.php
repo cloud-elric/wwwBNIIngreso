@@ -38,9 +38,15 @@ use \yii\helpers\Url;
             }
             ?>
             <li class="site-menu-category">General</li>
+            <li class="site-menu-item">
+                <a class="animsition-link" href="<?=Url::base()?>">
+                    <i class="site-menu-icon wb-home" aria-hidden="true"></i>
+                    <span class="site-menu-title">Inicio</span>
+                </a>
+            </li>
             <li class="site-menu-item has-sub">
                 <a href="javascript:void(0)">
-                    <i class="site-menu-icon wb-layout" aria-hidden="true"></i>
+                    <i class="site-menu-icon wb-users" aria-hidden="true"></i>
                     <span class="site-menu-title">Miembros</span>
                     <span class="site-menu-arrow"></span>
                 </a>
@@ -64,13 +70,13 @@ use \yii\helpers\Url;
             </li>
             <li class="site-menu-item has-sub">
                 <a href="javascript:void(0)">
-                    <i class="site-menu-icon wb-layout" aria-hidden="true"></i>
+                    <i class="site-menu-icon wb-envelope" aria-hidden="true"></i>
                     <span class="site-menu-title">Invitados</span>
                     <span class="site-menu-arrow"></span>
                 </a>
                 <ul class="site-menu-sub">
                     <li class="site-menu-item">
-                        <a class="animsition-link" href="../layouts/menu-collapsed.html">
+                        <a class="animsition-link" href="<?=Url::base()?>/site/agregar-invitado">
                             <span class="site-menu-title">Registrar invitado</span>
                         </a>
                     </li>

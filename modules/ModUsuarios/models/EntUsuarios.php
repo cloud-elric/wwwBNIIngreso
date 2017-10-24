@@ -25,6 +25,7 @@ use yii\web\UploadedFile;
  * @property string $fch_creacion
  * @property string $fch_actualizacion
  * @property string $id_status
+ * @property string $id_usuario_miembro
  *
  * @property EntSesiones[] $entSesiones
  * @property CatStatusUsuarios $idStatus
@@ -61,8 +62,16 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				],
 				[ 
 						'txt_username',
+						
 						'trim' 
 				],
+
+				[ 
+					'id_usuario_miembro',
+					
+					'trim' 
+			],
+			
 				[ 
 						[ 
 								'id_status' 
@@ -80,6 +89,17 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 						'on' => 'registerInput',
 						'message'=>'Campo requerido'
 				],
+				[ 
+					[ 
+							
+							'txt_username',
+							'txt_apellido_paterno',
+							
+					],
+					'required',
+					'on' => 'registerInvitado',
+					'message'=>'Campo requerido'
+			],
 
 				// [ 
 				// 		[ 
@@ -168,7 +188,8 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 						'targetAttribute' => [ 
 								'id_status' => 'id_status' 
 						] 
-				] 
+				] ,
+				
 		];
 	}
 	
@@ -189,7 +210,8 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 				'fch_creacion' => 'Fch Creacion',
 				'fch_actualizacion' => 'Fch Actualizacion',
 				'id_status' => 'Id Status',
-				'image'=>'Imagen' 
+				'image'=>'Imagen', 
+				'id_usuario_miembro'=>'Usuario que invito'
 		];
 	}
 	
@@ -416,6 +438,7 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		$user->fch_creacion = Utils::getFechaActual ();
 		$user->id_tipo_usuario = 1;
 		$user->image = $this->image;
+		$user->id_usuario_miembro = $this->id_usuario_miembro;
 
 		$user->id_status = self::STATUS_ACTIVED;
 		

@@ -11,7 +11,7 @@ $this->title = '';
                 <a href="<?=Url::base()?>/site/identificar-miembro" class="btn btn-success btn-block btn-lg">Miembro</a>
             </div>
             <div class="col-md-6">
-                <a href="<?=Url::base()?>" class="btn btn-primary btn-block btn-lg">Invitado</a>
+                <a href="<?=Url::base()?>/site/agregar-invitado" class="btn btn-primary btn-block btn-lg">Invitado</a>
             </div>
         </div>
     </div>
