@@ -87,8 +87,13 @@ $(document).ready(function () {
             url: url,
             type: "POST",
             data:data,
-            success:function(){
-                $('#myModal').modal('hide');
+            success:function(resp){
+
+                if(resp.status=="success"){
+                    $('#myModal').modal('hide');
+                    swal("OK", "Tu registro se ha completado", "success");
+                }
+                
             }
         });
     });
@@ -126,7 +131,8 @@ $(document).ready(function () {
                     $("#nombre-usuario").text(resp.usuario.txt_username+" "+resp.usuario.txt_apellido_paterno);
                     $("#imagen-encontrada").attr("src", baseUrl+"imagenes/" + resp.usuario.txt_token + ".png");
 
-                    $(".js-registrar-entrada").data("token", resp.usuario.token);
+                    $(".js-registrar-entrada").data("token", resp.usuario.txt_token);
+                        
 
                 } else {
                     swal({
