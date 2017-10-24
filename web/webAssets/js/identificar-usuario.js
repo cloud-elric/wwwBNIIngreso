@@ -76,6 +76,22 @@ $(document).ready(function () {
 
     });
 
+    $(".js-registrar-entrada").on("click", function(e){
+        e.preventDefault();
+        var token = $(this).data("token");
+        var url = baseUrl+"site/agregar-entrada";
+        $.ajax({
+            url: url,
+            type: "POST",
+            data:{
+                token = token
+            },
+            success:function(){
+                $('#myModal').modal('hide');
+            }
+        });
+    });
+
     $("#btn-guardar").on("click", function () {
         var canvas = document.getElementById('canvas');
         var dataURL = canvas.toDataURL();
@@ -101,8 +117,10 @@ $(document).ready(function () {
                 if (resp.usuario.txt_token) {
 
                     $('#myModal').modal('show');
-                    $("#nombre-usuario").text(resp.txt_nombre_completo);
-                    $("#imagen-encontrada").attr("src", "imagenes/" + resp.txt_token + ".png");
+                    $("#nombre-usuario").text(resp.usuario.txt_nombre_completo);
+                    $("#imagen-encontrada").attr("src", baseUrl+"imagenes/" + resp.usuario.txt_token + ".png");
+
+                    $(".js-registrar-entrada").data("token", resp.usuario.token);
 
                 } else {
                     swal({

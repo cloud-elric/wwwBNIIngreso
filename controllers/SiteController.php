@@ -124,6 +124,10 @@ class SiteController extends Controller
         }
     }
 
+    public function actionAgregarEntrada(){
+        
+    }
+
     public function actionAgregarMiembros(){
         $model = new EntUsuarios ( [ 
             'scenario' => 'registerInput' 
