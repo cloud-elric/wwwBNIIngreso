@@ -93,6 +93,7 @@ class SiteController extends Controller
             $usuario = false;
 
             $usuarioEncontrado['status'] = "No encontrado";
+            $usuarioEncontrado['resultado']= $resultado;
 
 
             foreach ($resultado as $persona) {
