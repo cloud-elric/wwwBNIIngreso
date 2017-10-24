@@ -99,7 +99,7 @@ class SiteController extends Controller
             foreach ($resultado as $persona) {
                 if (!$usuario) {
                     foreach ($persona as $datos) {
-                        if($datos->recognition->predictedLabel > 50){
+                        if($datos->recognition->confidence > 50){
                             $token = $datos->recognition->predictedLabel;
                         }else{
                             $token = null;
