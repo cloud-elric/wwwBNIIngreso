@@ -88,12 +88,24 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 							    'image',
 								'txt_username',
 								'txt_apellido_paterno',
+								'txt_email'
 								
 						],
 						'required',
 						'on' => 'registerInput',
 						'message'=>'Campo requerido'
 				],
+
+				[ 
+					[ 
+							
+							'txt_email'
+							
+					],
+					'email',
+					'on' => 'registerInput',
+					'message'=>'Formato de email no válido'
+			],
 				[ 
 					[ 
 							
@@ -437,7 +449,7 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
 		$user->txt_username = $this->txt_username;
 		$user->txt_apellido_paterno = $this->txt_apellido_paterno;
 		$user->txt_apellido_materno = $this->txt_apellido_materno;
-		$user->txt_email = $user->txt_token."@email.com";
+		$user->txt_email = $this->txt_email;//$user->txt_token."@email.com";
 		
 		$user->setPassword ( $this->password );
 		$user->generateAuthKey ();

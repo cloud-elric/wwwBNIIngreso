@@ -16,10 +16,10 @@ if(!$usuario){
       <span class="sr-only">Toggle navigation</span>
       <span class="hamburger-bar"></span>
     </button>
-    <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
+    <!-- <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
       <img class="navbar-brand-logo" src="../assets/images/logo.png" title="Remark">
       <span class="navbar-brand-text"> Remark</span>
-    </div>
+    </div> -->
   </div>
 
     <div class="navbar-container container-fluid">
