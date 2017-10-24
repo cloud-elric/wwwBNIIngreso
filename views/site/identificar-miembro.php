@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use app\models\CatTiposPagos;
 use yii\widgets\ActiveForm;
 $this->title="Identificar miembro";
