@@ -281,6 +281,7 @@ class SiteController extends Controller
                 if ($model = $model->signup()) {
 
                     $registro->id_usuario = $model->id_usuario;
+                    $registro->fch_registro = Utils::getFechaActual();
                     if ($registro->save()) {
                         $transaction->commit();
                         $respuesta['status'] = 'success';
