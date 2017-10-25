@@ -189,6 +189,7 @@ class SiteController extends Controller
                     $respuesta["resultado"] = $this->guargarUsuarioMeerkat($model);
 
                     $registro->id_usuario = $model->id_usuario;
+                    $registro->fch_registro = Utils::getFechaActual();
                     if ($registro->save()) {
                         $transaction->commit();
                         $respuesta["status"] ="success";
