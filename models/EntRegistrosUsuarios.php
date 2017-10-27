@@ -18,6 +18,9 @@ use app\modules\ModUsuarios\models\EntUsuarios;
  */
 class EntRegistrosUsuarios extends \yii\db\ActiveRecord
 {
+
+    public  $fch_disponible;
+
     /**
      * @inheritdoc
      */
@@ -59,6 +62,8 @@ class EntRegistrosUsuarios extends \yii\db\ActiveRecord
     {
         return $this->hasOne(EntUsuarios::className(), ['id_usuario' => 'id_usuario']);
     }
+
+    
 
     /**
      * @return \yii\db\ActiveQuery

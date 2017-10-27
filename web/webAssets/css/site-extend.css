@@ -70,3 +70,43 @@ video{
     border-radius: 10px;
 }
 
+.animsition-loading.ui-pajax{
+    position: absolute;
+}
+
+.panel-body.fade-out{
+    animation-duration: 1500ms;
+    opacity:0;
+}
+
+@-webkit-keyframes fade-in{
+    0%{
+        display:none
+    }
+    to{
+        display:block
+    }
+}
+@keyframes fade-in{
+    0%{
+        display:none
+    }
+    to{
+        display:block
+    }
+}
+.js-ms-loading.fade-in{
+    animation-duration: 1500ms;
+    display: block;
+    -webkit-animation-name:fade-in-loading;
+    animation-name:fade-in-loading
+}
+
+.js-ms-loading{
+    display: none;
+    position: absolute;
+    padding: 20px;
+    top: 0;
+    right: 0;
+    left: 0;
+}

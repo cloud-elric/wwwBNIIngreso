@@ -18,7 +18,7 @@ use app\modules\ModUsuarios\models\Utils;
 
 class SiteController extends Controller
 {
-    
+
 
     /**
      * @inheritdoc
@@ -49,7 +49,8 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
-    public function actionMiembros(){
+    public function actionMiembros()
+    {
         $searchModel = new EntUsuariosSearch();
         $dataProvider = $searchModel->searchMiembros(Yii::$app->request->queryParams);
 
@@ -93,15 +94,16 @@ class SiteController extends Controller
             $usuario = false;
 
             $usuarioEncontrado['status'] = "No encontrado";
-            $usuarioEncontrado['resultado']= $resultado;
+            $usuarioEncontrado['resultado'] = $resultado;
 
 
             foreach ($resultado as $persona) {
                 if (!$usuario) {
                     foreach ($persona as $datos) {
-                        if($datos->recognition->confidence > 30){
+                        if ($datos->recognition->confidence > 30) {
                             $token = $datos->recognition->predictedLabel;
-                        }else{
+                        }
+                        else {
                             $token = null;
                         }
                         $usuario = true;
@@ -125,24 +127,26 @@ class SiteController extends Controller
         $respuesta['mensaje'] = "Faltan parametros";
         $registro = new EntRegistrosUsuarios();
 
-        
+
 
         if (isset($_POST["token"]) && $registro->load(Yii::$app->request->post())) {
             $token = $_POST["token"];
             $usuario = EntUsuarios::find()->where(["txt_token" => $token])->one();
             if ($usuario) {
-                
+
                 $registro->id_usuario = $usuario->id_usuario;
                 $registro->fch_registro = Utils::getFechaActual();
 
-                if($registro->save()){
+                if ($registro->save()) {
                     $respuesta["mensaje"] = "Registro completo";
                     $respuesta["status"] = "success";
-                }else{
+                }
+                else {
                     $respuesta["mensaje"] = "No se pudo guardar al usuario";
                 }
-            }else{
-                $respuesta["mensaje"]= "No se encontro al usuario";
+            }
+            else {
+                $respuesta["mensaje"] = "No se encontro al usuario";
             }
         }
 
@@ -170,7 +174,7 @@ class SiteController extends Controller
         $model = new EntUsuarios();
         $registro = new EntRegistrosUsuarios();
         $respuesta["status"] = "error";
-        $respuesta["mensaje"] ="Faltan parametros";
+        $respuesta["mensaje"] = "Faltan parametros";
 
 
         if ($model->load(Yii::$app->request->post()) && $registro->load(Yii::$app->request->post())) {
@@ -192,23 +196,24 @@ class SiteController extends Controller
                     $registro->fch_registro = Utils::getFechaActual();
                     if ($registro->save()) {
                         $transaction->commit();
-                        $respuesta["status"] ="success";
-                        $respuesta["mensaje"] ="Usuario guardado correctamente";
+                        $respuesta["status"] = "success";
+                        $respuesta["mensaje"] = "Usuario guardado correctamente";
                     }
                     else {
 
                         $transaction->rollBack();
-                        $respuesta["mensaje"] ="No se pudo guardar el registro";
+                        $respuesta["mensaje"] = "No se pudo guardar el registro";
                     }
-                }else{
-                    $respuesta["mensaje"] ="No se pudo guardar el usuario";
+                }
+                else {
+                    $respuesta["mensaje"] = "No se pudo guardar el usuario";
                 }
 
 
 
             } catch (\Exception $e) {
                 $transaction->rollBack();
-                $respuesta["mensaje"] =$e;
+                $respuesta["mensaje"] = $e;
                 throw $e;
             }
         }
@@ -233,14 +238,16 @@ class SiteController extends Controller
         $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
         $urlImage = $baseUrl . 'imagenes/' . $idFoto . '.png';
 
-       
-         $meerkatApi = new Meerkat();
+
+        $meerkatApi = new Meerkat();
          //return $meerkatApi->guardarUsuario($urlImage, $miembro->txt_token);
+
 
     }
 
 
-    public function actionHardGuardarMeerkat($token){
+    public function actionHardGuardarMeerkat($token)
+    {
         $meerkatApi = new Meerkat();
 
         $baseUrl = Yii::$app->urlManager->createAbsoluteUrl(['']);
@@ -320,22 +327,126 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionDetallesMiembro($token=null){
+    public function actionDetallesMiembro($token = null)
+    {
 
-        $miembro = EntUsuarios::find()->where(["txt_token"=>$token])->one();
-        if($miembro){
+        $miembro = EntUsuarios::find()->where(["txt_token" => $token])->one();
+        if ($miembro) {
 
-            return $this->render("detalles-miembro", ["miembro"=>$miembro]);    
-        }else{
+            return $this->render("detalles-miembro", ["miembro" => $miembro]);
+        }
+        else {
             $this->goHome();
         }
 
-        
+
     }
 
-    public function actionTestDate(){
+    public function actionTestDate()
+    {
         echo Utils::getFechaActual();
     }
 
+    public function actionReportes()
+    {
+
+        $searchModel = new EntUsuariosSearch();
+        $dataProviderInvitados = $searchModel->searchInvitados(Yii::$app->request->queryParams);
+
+        $dataProviderMiembros = $searchModel->searchMiembros(Yii::$app->request->queryParams);
+
+        $fechaDisponibles = EntRegistrosUsuarios::find()
+        ->select(['fch_registro as fch_disponible'])
+        ->groupBy(['fch_registro'])
+        ->all();
+
+
+        return $this->render("reportes", [
+            'dataProviderInvitados' => $dataProviderInvitados, 
+            'dataProviderMiembro' => $dataProviderMiembros,
+            'fechaDisponibles' => $fechaDisponibles
+            ]);
+    }
+
+
+    public function actionExportarAsistenciasMiembros(){
+        
+       
+        $registros =  EntRegistrosUsuarios::find()->joinWith('idUsuario')->where('mod_usuarios_ent_usuarios.b_miembro=1')->orderBy("fch_registro")->all();
+        
+        
+		$arrayCsv = [ ];
+		$i = 0;
+		foreach ( $registros as $registro ) {
+            $arrayCsv [$i] ['nombreCompleto'] = $registro->idUsuario->nombreCompleto;
+            $arrayCsv [$i] ['email'] = $registro->idUsuario->txt_email;
+			$arrayCsv [$i] ['fch_registro'] = $registro->fch_registro;
+			
+			$i++;
+		}
+	//print_r($arrayCsv );
+	//exit ();
+		$this->downloadSendHeaders ( 'reporte.csv' );
+		echo $this->array2Csv ( $arrayCsv );
+		die();
+    }
+
+    public function actionExportarAsistenciasInvitados(){
+        
+       
+        $registros =  EntRegistrosUsuarios::find()->joinWith('idUsuario')->where('mod_usuarios_ent_usuarios.b_miembro=0')->orderBy("fch_registro")->all();
+        
+        
+		$arrayCsv = [ ];
+		$i = 0;
+		foreach ( $registros as $registro ) {
+            $arrayCsv [$i] ['nombreCompleto'] = $registro->idUsuario->nombreCompleto;
+            $arrayCsv [$i] ['email'] = $registro->idUsuario->txt_email;
+			$arrayCsv [$i] ['fch_registro'] = $registro->fch_registro;
+			
+			$i++;
+		}
+	//print_r($arrayCsv );
+	//exit ();
+		$this->downloadSendHeaders ( 'reporte.csv' );
+		echo $this->array2Csv ( $arrayCsv );
+		die();
+    }
+    
+
+    private function array2Csv($array) {
+        if (count ( $array ) == 0) {
+            return null;
+        }
+        ob_start();
+        $df = fopen ( "php://output", "w" );
+        fputcsv ( $df, [
+                'Nombre completo',
+                'Email',				
+                'Fecha registro',
+        ]
+            );
+        foreach ( $array as $row ) {
+            fputcsv ( $df, $row );
+        }
+        fclose ( $df );
+        return ob_get_clean();
+    }
+
+    private function downloadSendHeaders($filename) {
+		// disable caching
+		$now = gmdate ( "D, d M Y H:i:s" );
+		// header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+		header ( "Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate" );
+		header ( "Last-Modified: {$now} GMT" );
+		// force download
+		header ( "Content-Type: application/force-download" );
+		header ( "Content-Type: application/octet-stream" );
+		// comentario sin sentido
+		header ( "Content-Type: application/download" );
+		// disposition / encoding on response body
+		header ( "Content-Disposition: attachment;filename={$filename}" );
+		header ( "Content-Transfer-Encoding: binary" );
+	}
 
 }

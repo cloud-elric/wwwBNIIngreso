@@ -87,6 +87,42 @@ use \yii\helpers\Url;
                     </li>
                 </ul>
             </li>
+            <?php
+            if (\Yii::$app->user->can('admin') || \Yii::$app->user->can('miembro')) {
+            ?>) {
+            ?>
+            <li class="site-menu-item has-sub">
+                <a href="javascript:void(0)">
+                    <i class="site-menu-icon wb-order" aria-hidden="true"></i>
+                    <span class="site-menu-title">Leads</span>
+                    <span class="site-menu-arrow"></span>
+                </a>
+                <ul class="site-menu-sub">
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?=Url::base()?>/site/agregar-invitado">
+                            <span class="site-menu-title">Dashboard leads</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?=Url::base()?>/site/agregar-invitado">
+                            <span class="site-menu-title">Asignar lead</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?=Url::base()?>/site/invitados">
+                            <span class="site-menu-title">Mis leads asignados</span>
+                        </a>
+                    </li>
+                    <li class="site-menu-item">
+                        <a class="animsition-link" href="<?=Url::base()?>/site/invitados">
+                            <span class="site-menu-title">Leads que asigne</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <?php
+            }
+            ?>
         </ul>
         </div>
     </div>

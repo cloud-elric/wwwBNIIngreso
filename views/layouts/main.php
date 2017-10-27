@@ -34,6 +34,7 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body class="site-menubar-unfold">
+  <div class="animsition-loading"></div>
   <div class="animsition">
   <?php $this->beginBody() ?>
 

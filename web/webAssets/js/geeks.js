@@ -4,7 +4,16 @@
 $(document).ready(function() {
     // Animación entre pantallas
       $(".animsition").animsition({
-        transition: function(url){}
+        transition: function(url){},
+        loading : false
+      });
+      
+      $('.animsition').on('animsition.inStart', function() {
+        $(".animsition-loading").hide();
+      });
+    
+      $('.animsition').on('animsition.outStart', function() {
+        $(".animsition-loading").show();
       });
   
       // Cargador en todos los botones con la clase ladda
@@ -34,6 +43,34 @@ $(document).ready(function() {
   window.onbeforeunload = function(){
     $('.animsition').animsition('out', $('.animsition'), '');
   }
+
+  function resetForm(form) {
+    // clearing inputs
+    var inputs = form.getElementsByTagName('input');
+    for (var i = 0; i<inputs.length; i++) {
+        switch (inputs[i].type) {
+            // case 'hidden':
+            case 'text':
+                $(inputs[i]).val("");
+                break;
+            case 'radio':
+            case 'checkbox':
+                inputs[i].checked = false;   
+        }
+    }
+
+    // clearing selects
+    var selects = form.getElementsByTagName('select');
+    for (var i = 0; i<selects.length; i++)
+        selects[i].selectedIndex = 0;
+
+    // clearing textarea
+    var text= form.getElementsByTagName('textarea');
+    for (var i = 0; i<text.length; i++)
+        text[i].innerHTML= '';
+
+    return false;
+}
   
   
   
