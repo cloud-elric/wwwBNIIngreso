@@ -380,14 +380,15 @@ class SiteController extends Controller
 		foreach ( $registros as $registro ) {
             $arrayCsv [$i] ['nombreCompleto'] = $registro->idUsuario->nombreCompleto;
             $arrayCsv [$i] ['email'] = $registro->idUsuario->txt_email;
-			$arrayCsv [$i] ['fch_registro'] = $registro->fch_registro;
+            $arrayCsv [$i] ['fch_registro'] = $registro->fch_registro;
+            $arrayCsv [$i] ['num_invitados'] = count($registro->idUsuario->invitados);
 			
 			$i++;
 		}
 	//print_r($arrayCsv );
 	//exit ();
 		$this->downloadSendHeaders ( 'reporte.csv' );
-		echo $this->array2Csv ( $arrayCsv );
+		echo $this->array2CsvMiembro ( $arrayCsv );
 		die();
     }
 
@@ -402,19 +403,19 @@ class SiteController extends Controller
 		foreach ( $registros as $registro ) {
             $arrayCsv [$i] ['nombreCompleto'] = $registro->idUsuario->nombreCompleto;
             $arrayCsv [$i] ['email'] = $registro->idUsuario->txt_email;
-			$arrayCsv [$i] ['fch_registro'] = $registro->fch_registro;
+            $arrayCsv [$i] ['fch_registro'] = $registro->fch_registro;
+            $arrayCsv [$i] ['nombre'] = $registro->idUsuario->invitadoPor?$registro->idUsuario->invitadoPor->nombreCompleto:'';
 			
 			$i++;
 		}
 	//print_r($arrayCsv );
 	//exit ();
 		$this->downloadSendHeaders ( 'reporte.csv' );
-		echo $this->array2Csv ( $arrayCsv );
+		echo $this->array2CsvInvitado ( $arrayCsv );
 		die();
     }
-    
 
-    private function array2Csv($array) {
+    private function array2CsvMiembro($array) {
         if (count ( $array ) == 0) {
             return null;
         }
@@ -424,6 +425,28 @@ class SiteController extends Controller
                 'Nombre completo',
                 'Email',				
                 'Fecha registro',
+                '# de invitados'
+        ]
+            );
+        foreach ( $array as $row ) {
+            fputcsv ( $df, $row );
+        }
+        fclose ( $df );
+        return ob_get_clean();
+    }
+    
+
+    private function array2CsvInvitado($array) {
+        if (count ( $array ) == 0) {
+            return null;
+        }
+        ob_start();
+        $df = fopen ( "php://output", "w" );
+        fputcsv ( $df, [
+                'Nombre completo',
+                'Email',				
+                'Fecha registro',
+                'Invitado por'
         ]
             );
         foreach ( $array as $row ) {

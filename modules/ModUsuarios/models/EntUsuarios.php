@@ -586,4 +586,12 @@ class EntUsuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
 		return $this->hasOne(EntUsuarios::className(), ['id_usuario' => 'id_usuario_miembro']);
 	}
+
+	/**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvitados()
+    {
+		return $this->hasMany(EntUsuarios::className(), ['id_usuario_miembro' => 'id_usuario']);
+	}
 }
