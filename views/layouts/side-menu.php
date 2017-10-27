@@ -87,6 +87,12 @@ use \yii\helpers\Url;
                     </li>
                 </ul>
             </li>
+            <li class="site-menu-item">
+                <a class="animsition-link" href="<?=Url::base()?>/site/reportes">
+                    <i class="site-menu-icon wb-pie-chart" aria-hidden="true"></i>
+                    <span class="site-menu-title">Reporte de asistencia</span>
+                </a>
+            </li>
             <?php
             if (\Yii::$app->user->can('admin') || \Yii::$app->user->can('miembro')) {
             ?>) {
