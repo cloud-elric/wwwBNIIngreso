@@ -49,7 +49,7 @@ class EntRegistrosUsuarios extends \yii\db\ActiveRecord
     {
         return [
             'id_registro_usuario' => 'Id Registro Usuario',
-            'id_usuario' => 'Id Usuario',
+            'id_usuario' => 'Miembro',
             'id_tipo_pago' => 'Tipo de pago',
             'fch_registro' => 'Fch Registro',
         ];

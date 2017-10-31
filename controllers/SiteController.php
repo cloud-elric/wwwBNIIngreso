@@ -15,6 +15,7 @@ use yii\widgets\ActiveForm;
 use app\models\EntRegistrosUsuarios;
 use app\modules\ModUsuarios\models\EntUsuariosSearch;
 use app\modules\ModUsuarios\models\Utils;
+use app\models\ViewFechasDisponibles;
 
 class SiteController extends Controller
 {
@@ -118,6 +119,31 @@ class SiteController extends Controller
             exit;
 
         }
+    }
+
+
+    public function actionAgregarEntradaMiembro(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $respuesta['status'] = "error";
+        $respuesta['mensaje'] = "Faltan parametros";
+        $registro = new EntRegistrosUsuarios();
+
+        if ($registro->load(Yii::$app->request->post())) {
+            
+                $registro->fch_registro = Utils::getFechaActual();
+
+                if ($registro->save()) {
+                    $respuesta["mensaje"] = "Registro completo";
+                    $respuesta["status"] = "success";
+                }
+                else {
+                    $respuesta["mensaje"] = "No se pudo guardar al usuario";
+                }
+           
+        }
+
+        return $respuesta;
+
     }
 
     public function actionAgregarEntrada()
@@ -347,28 +373,6 @@ class SiteController extends Controller
         echo Utils::getFechaActual();
     }
 
-    public function actionReportes()
-    {
-
-        $searchModel = new EntUsuariosSearch();
-        $dataProviderInvitados = $searchModel->searchInvitados(Yii::$app->request->queryParams);
-
-        $dataProviderMiembros = $searchModel->searchMiembros(Yii::$app->request->queryParams);
-
-        $fechaDisponibles = EntRegistrosUsuarios::find()
-        ->select(['fch_registro as fch_disponible'])
-        ->groupBy(['fch_registro'])
-        ->all();
-
-
-        return $this->render("reportes", [
-            'dataProviderInvitados' => $dataProviderInvitados, 
-            'dataProviderMiembro' => $dataProviderMiembros,
-            'fechaDisponibles' => $fechaDisponibles
-            ]);
-    }
-
-
     public function actionExportarAsistenciasMiembros(){
         
        
@@ -470,6 +474,24 @@ class SiteController extends Controller
 		// disposition / encoding on response body
 		header ( "Content-Disposition: attachment;filename={$filename}" );
 		header ( "Content-Transfer-Encoding: binary" );
-	}
+    }
+    
+    public function actionReportes()
+    {
+
+        $searchModel = new EntUsuariosSearch();
+        $dataProviderInvitados = $searchModel->searchInvitados(Yii::$app->request->queryParams);
+
+        $dataProviderMiembros = $searchModel->searchMiembros(Yii::$app->request->queryParams);
+
+        $fechaDisponibles = ViewFechasDisponibles::find()->all();
+
+
+        return $this->render("reportes", [
+            'dataProviderInvitados' => $dataProviderInvitados, 
+            'dataProviderMiembro' => $dataProviderMiembros,
+            'fechaDisponibles' => $fechaDisponibles
+            ]);
+    }
 
 }

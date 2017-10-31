@@ -3,6 +3,10 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use app\models\CatTiposPagos;
 use yii\widgets\ActiveForm;
+use app\modules\ModUsuarios\models\EntUsuarios;
+use kartik\select2\Select2;
+use yii\bootstrap\Modal;
+
 $this->title="Identificar miembro";
 
 $this->registerJsFile(
@@ -95,3 +99,36 @@ $this->registerJsFile(
         </div>
     </div>
 </div>
+
+
+<?php
+// Using a select2 widget inside a modal dialog
+Modal::begin([
+    'options' => [
+        'id' => 'modal-registro',
+        'tabindex' => false // important for Select2 to work properly
+    ],
+    'header' => '<h4 class="modal-title" id="modal-registro-label">Registro manual</h4>',
+    //'toggleButton' => ['label' => 'Show Modal', 'class' => 'btn btn-lg btn-primary'],
+]);
+
+$form = ActiveForm::begin([
+    'id' => 'form-agregar-registro-miembro',
+    //'options' => ['class' => 'form-horizontal'],
+    
+    'enableClientValidation'=>true,
+]);
+
+echo $form->field($registro, 'id_usuario')->widget(Select2::classname(), [
+    'data' => ArrayHelper::map(EntUsuarios::find()->where(["b_miembro"=>1 ,"id_tipo_usuario"=>1])->orderBy("txt_username")->all(), 'id_usuario', 'nombreCompleto'),
+    'options' => ['placeholder' => 'Selecciona un miembro'],
+    'pluginOptions' => [
+        'allowClear' => true
+    ],
+]);
+
+echo $form->field($registro, 'id_tipo_pago')->radioList(ArrayHelper::map(CatTiposPagos::find()->all(), 'id_tipo_pago', 'txt_nombre'));
+
+echo Html::submitButton('<span class="ladda-label">Registrar entrada</span>', ['class' => "btn btn-succes btn-block btn-lg js-registrar-entrada-miembro ladda-button", "data-style"=>"zoom-in",  'id'=>'btn-registrar-entrada', 'data-token'=>""]);
+ActiveForm::end();
+Modal::end();

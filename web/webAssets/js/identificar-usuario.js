@@ -103,6 +103,33 @@ $(document).ready(function () {
         });
     });
 
+    $(".js-registrar-entrada-miembro").on("click", function(e){
+        e.preventDefault();
+        
+        var url = baseUrl+"site/agregar-entrada-miembro";
+        var formEntrada = $("#form-agregar-registro-miembro");
+        var data = formEntrada.serialize();
+        var l = Ladda.create(this);
+        $.ajax({
+            url: url,
+            type: "POST",
+            data:data,
+            success:function(resp){
+
+                if(resp.status=="success"){
+                    $('#modal-registro').modal('hide');
+                    swal("OK", "Tu registro se ha completado", "success");
+                }else{
+                    swal("Error", "Se ha producido un problema al guardar", "warning");
+                }
+                
+            }, 
+            complete:function(){
+                l.stop();
+            }
+        });
+    });
+
     $(".js-close-modal").on("click", function(e){
         e.preventDefault();
         $('#myModal').modal('hide');
@@ -148,14 +175,29 @@ $(document).ready(function () {
                         
                         closeOnConfirm: false,
                         closeOnCancel: false,
-                        buttons: ["Intentar de nuevo", "Soy un miembro nuevo"],
+                        
+                        buttons: {
+                            cancel: "Intentar de nuevo",
+                            confirm: {
+                                text: "Soy un miembro nuevo",
+                                value: "confirm",
+                            },
+                            back: {
+                                text: "Estoy registrado",
+                                value: "back",
+                            },
+                        },
                     
-                    }).then((confirm) => {
-                        if (confirm) {
-                            window.location = baseUrl+"site/agregar-miembros";
-                        } else {
-                          //swal("Your imaginary file is safe!");
+                    }).then((value) => {
+                        switch (value){
+                            case "back":
+                                $("#modal-registro").modal("show");
+                            break;
+                            case "confirm":
+                                window.location = baseUrl+"site/agregar-miembros";
+                            break;
                         }
+                       
                       });
                     //swal("Sin datos", "No se encontro una persona aproximada", "warning");
                 }
